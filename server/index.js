@@ -28,7 +28,7 @@ app.get("/api/health", (req, res) => {
 });
 
 // Create unique Razorpay Payment Link
-app.post("/api/payment/create", async (req, res) => {
+app.post("/api/payment/create", express.json(), async (req, res) => {
   try {
     const { sessionId, name, email } = req.body;
 
