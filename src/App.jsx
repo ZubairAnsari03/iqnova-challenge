@@ -942,42 +942,89 @@ setTimeout(() => {
 
       {/* RESULT */}
       {page === "result" && (
-        <main className="start-page">
+  <main className="start-page">
+    <div className="start-box result-box">
 
-          <div className="start-box result-box">
+      <div className="badge">
+        {t.complete}
+      </div>
 
-            <div className="badge">
-              {t.complete}
-            </div>
+      <h1>{t.resultReady}</h1>
 
-            <h1>{t.resultReady}</h1>
+      <p>
+        {paymentPaid
+          ? "Payment verified — tumhara complete result unlock ho gaya hai."
+          : "Tumhara result generate ho chuka hai. ₹19 pay karke complete result aur certificate unlock karo."}
+      </p>
 
-            <p>{t.resultDesc}</p>
+      <div className="locked-result">
 
-            <div className="locked-result">
-              <strong>₹19</strong>
-              <span>{t.fullUnlock}</span>
-            </div>
+        <div className="result-preview-grid">
 
-            <button
-  className="primary-button"
-  onClick={unlockResult}
-  disabled={paymentLoading}
->
-  {paymentLoading
-    ? language === "hindi"
-      ? "Payment Link Ban Raha Hai..."
-      : language === "english"
-        ? "Creating Payment Link..."
-        : "Payment Link Ban Raha Hai..."
-    : t.unlockResult}
-  <span>→</span>
-</button>
-
+          <div className="result-preview-card">
+            <span>🏆</span>
+            <small>Score</small>
+            <strong>{paymentPaid ? "— / 100" : "🔒 Locked"}</strong>
           </div>
 
-        </main>
+          <div className="result-preview-card">
+            <span>⏱</span>
+            <small>Completion Time</small>
+            <strong>{paymentPaid ? "—" : "🔒 Locked"}</strong>
+          </div>
+
+          <div className="result-preview-card">
+            <span>📊</span>
+            <small>Performance</small>
+            <strong>{paymentPaid ? "—" : "🔒 Locked"}</strong>
+          </div>
+
+          <div className="result-preview-card">
+            <span>🎓</span>
+            <small>Certificate</small>
+            <strong>{paymentPaid ? "Available" : "🔒 Locked"}</strong>
+          </div>
+
+        </div>
+
+        {!paymentPaid && (
+          <div className="unlock-offer">
+            <strong>₹19</strong>
+            <span>{t.fullUnlock}</span>
+          </div>
+        )}
+
+      </div>
+
+      {!paymentPaid ? (
+        <button
+          className="primary-button"
+          onClick={unlockResult}
+          disabled={paymentLoading}
+        >
+          {paymentLoading
+            ? "Payment Link Ban Raha Hai..."
+            : t.unlockResult}
+          <span>→</span>
+        </button>
+      ) : (
+        <div className="unlocked-result">
+          <h2>🎉 Result Unlocked!</h2>
+
+          <p>
+            Full analysis, answer review aur certificate yahan available hoga.
+          </p>
+
+          <button className="primary-button">
+            Download Certificate PDF
+            <span>↓</span>
+          </button>
+        </div>
       )}
+
+    </div>
+  </main>
+)}
 
     </div>
   );
