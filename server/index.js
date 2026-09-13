@@ -39,6 +39,63 @@ app.post("/api/payment/create", express.json(), async (req, res) => {
       });
     }
 
+    // If this session already has a payment link, reuse it.
+    const existingSession = sessions.get(sessionId);
+
+    if (existingSession?.paymentLinkId) {
+      try {
+        const existingLink = await razorpay.paymentLink.fetch(
+          existingSession.paymentLinkId
+        );
+
+        return res.json({
+          success: true,
+          paymentLinkId: existingLink.id,
+          shortUrl: existingLink.short_url,
+        });
+      } catch (error) {
+        console.log("Existing payment link fetch failed, creating/finding again.");
+      }
+    }
+
+    // Razorpay reference_id must be unique.
+    // If a link was already created before a server restart,
+    // find that existing link and reuse it.
+    try {
+      const linksResponse = await razorpay.paymentLink.all({
+        reference_id: sessionId,
+        count: 10,
+      });
+
+      const links =
+        linksResponse?.items ||
+        linksResponse?.payment_links ||
+        [];
+
+      const existingLink = links.find(
+        (link) => link.reference_id === sessionId
+      );
+
+      if (existingLink) {
+        sessions.set(sessionId, {
+          sessionId,
+          name,
+          email,
+          paymentLinkId: existingLink.id,
+          paid: existingLink.status === "paid",
+        });
+
+        return res.json({
+          success: true,
+          paymentLinkId: existingLink.id,
+          shortUrl: existingLink.short_url,
+        });
+      }
+    } catch (findError) {
+      console.log("Could not find existing Razorpay link:", findError);
+    }
+
+    // Create a new payment link only if one does not already exist.
     const paymentLink = await razorpay.paymentLink.create({
       amount: 1900,
       currency: "INR",
