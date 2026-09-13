@@ -16,7 +16,12 @@ const FRONTEND_URL = (process.env.FRONTEND_URL || "http://localhost:5174").repla
 const AMOUNT_PAISE = 1900;
 const CURRENCY = "INR";
 
-const ANSWERS = [2, 1, 0, 1, 1, 2, 1, 0, 2, 2, 2, 0, 2, 2, 0, 1, 1, 3, 2];
+const ANSWERS = [
+  1, 2, 1, 2, 2,
+  2, 1, 3, 0, 1,
+  2, 2, 0, 2, 1,
+  2, 1, 1, 2
+];
 const WEIGHTS = [2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 10, 10, 10, 10];
 
 const razorpay = new Razorpay({
