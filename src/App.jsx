@@ -533,7 +533,7 @@ function App() {
     const checkPayment = async () => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/payment/status/${newSessionId}`
+      `https://iqnova-challenge.onrender.com/api/payment/status/${newSessionId}`
     );
 
     const data = await response.json();
