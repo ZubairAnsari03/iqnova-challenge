@@ -509,7 +509,7 @@ function App() {
     setSessionId(newSessionId);
 
     const response = await fetch(
-      "http://localhost:3001/api/payment/create",
+      "https://iqnova-challenge.onrender.com/api/payment/create",
       {
         method: "POST",
         headers: {
