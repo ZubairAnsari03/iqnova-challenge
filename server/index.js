@@ -148,57 +148,96 @@ async function createOrGetPaymentLink(session) {
     };
   }
 
-  const existing = await razorpay.paymentLink.all({
-    reference_id: session.session_id,
-  });
+  // First try to find an existing Razorpay payment link
+  try {
+    const existing = await razorpay.paymentLink.all({
+      reference_id: session.session_id,
+    });
 
-  const existingLink = existing?.payment_links?.[0];
+    const existingLink = existing?.payment_links?.find(
+      (item) => item.reference_id === session.session_id
+    );
 
-  if (existingLink) {
+    if (existingLink) {
+      await supabase
+        .from("challenge_sessions")
+        .update({
+          payment_link_id: existingLink.id,
+          payment_link_url: existingLink.short_url,
+        })
+        .eq("session_id", session.session_id);
+
+      return existingLink;
+    }
+  } catch (error) {
+    console.warn("Could not search existing payment link:", error.message);
+  }
+
+  // Create a new unique payment link
+  try {
+    const link = await razorpay.paymentLink.create({
+      amount: AMOUNT_PAISE,
+      currency: CURRENCY,
+      accept_partial: false,
+      reference_id: session.session_id,
+      description: "IQNova Full Result & Certificate",
+      customer: {
+        name: session.name,
+        email: session.email,
+      },
+      notify: {
+        email: false,
+        sms: false,
+        whatsapp: false,
+      },
+      reminder_enable: false,
+      callback_url: `${FRONTEND_URL}/?payment=success&sessionId=${encodeURIComponent(session.session_id)}`,
+      callback_method: "get",
+      notes: {
+        product: "IQNova IQ Challenge",
+        session_id: session.session_id,
+      },
+    });
+
     await supabase
       .from("challenge_sessions")
       .update({
-        payment_link_id: existingLink.id,
-        payment_link_url: existingLink.short_url,
+        payment_link_id: link.id,
+        payment_link_url: link.short_url,
       })
       .eq("session_id", session.session_id);
 
-    return existingLink;
+    return link;
+  } catch (error) {
+    // Razorpay says this reference_id already exists.
+    // Fetch that existing link and reuse it.
+    if (
+      error?.code === "BAD_REQUEST_ERROR" &&
+      String(error?.description || "").includes("reference_id")
+    ) {
+      const existing = await razorpay.paymentLink.all({
+        reference_id: session.session_id,
+      });
+
+      const existingLink = existing?.payment_links?.find(
+        (item) => item.reference_id === session.session_id
+      );
+
+      if (existingLink) {
+        await supabase
+          .from("challenge_sessions")
+          .update({
+            payment_link_id: existingLink.id,
+            payment_link_url: existingLink.short_url,
+          })
+          .eq("session_id", session.session_id);
+
+        return existingLink;
+      }
+    }
+
+    throw error;
   }
-
-  const link = await razorpay.paymentLink.create({
-    amount: AMOUNT_PAISE,
-    currency: CURRENCY,
-    accept_partial: false,
-    reference_id: session.session_id,
-    description: "IQNova Full Result & Certificate",
-    customer: {
-      name: session.name,
-      email: session.email,
-    },
-    notify: {
-      email: false,
-      sms: false,
-      whatsapp: false,
-    },
-    reminder_enable: false,
-    callback_url: `${FRONTEND_URL}/?payment=success&sessionId=${encodeURIComponent(session.session_id)}`,
-    callback_method: "get",
-    notes: {
-      product: "IQNova IQ Challenge",
-      session_id: session.session_id,
-    },
-  });
-
-  await supabase
-    .from("challenge_sessions")
-    .update({
-      payment_link_id: link.id,
-      payment_link_url: link.short_url,
-    })
-    .eq("session_id", session.session_id);
-
-  return link;
 }
 
 async function sendEmail({ to, subject, html, attachments }) {
