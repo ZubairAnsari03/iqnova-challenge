@@ -1,0 +1,463 @@
+
+/* IQNova mobile premium polish */
+@media (max-width: 768px) {
+  .app {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+    align-items: center !important;
+  }
+
+  .logo {
+    min-width: 0 !important;
+  }
+
+  .logo span {
+    font-size: 22px !important;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1 !important;
+    order: 3 !important;
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    padding-bottom: 2px !important;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-links a,
+  .nav-text-button {
+    white-space: nowrap !important;
+    font-size: 13px !important;
+  }
+
+  .nav-right {
+    display: contents !important;
+  }
+
+  .language-switcher {
+    grid-column: 1 / 2 !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+
+  .language-switcher::-webkit-scrollbar {
+    display: none;
+  }
+
+  .language-switcher button {
+    padding: 9px 11px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-cta {
+    grid-column: 2 / 3 !important;
+    padding: 11px 14px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+
+  .hero {
+    padding: 34px 18px 28px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+  }
+
+  .hero-content {
+    width: 100% !important;
+  }
+
+  .badge {
+    font-size: 11px !important;
+    letter-spacing: 1.2px !important;
+    padding: 11px 14px !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 12vw, 64px) !important;
+    line-height: .94 !important;
+    letter-spacing: -2px !important;
+    margin: 24px 0 18px !important;
+  }
+
+  .hero-content > p {
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+  }
+
+  .hero-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .primary-button,
+  .secondary-button {
+    min-height: 56px !important;
+    border-radius: 18px !important;
+    font-size: 16px !important;
+  }
+
+  .trust-line {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    font-size: 12px !important;
+  }
+
+  .hero-card {
+    width: 100% !important;
+    min-height: 290px !important;
+    border-radius: 28px !important;
+    padding: 24px !important;
+  }
+
+  .score-preview {
+    gap: 10px !important;
+  }
+
+  .score-preview > div {
+    padding: 15px 10px !important;
+    border-radius: 16px !important;
+  }
+
+  .score-preview strong {
+    font-size: 30px !important;
+  }
+
+  .difficulty {
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .difficulty span {
+    font-size: 10px !important;
+    padding: 6px 8px !important;
+  }
+
+  .features {
+    padding: 54px 18px !important;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .feature-card {
+    padding: 24px !important;
+    border-radius: 22px !important;
+  }
+
+  .verify-section {
+    margin: 0 18px 28px !important;
+    padding: 28px 22px !important;
+    border-radius: 24px !important;
+    display: grid !important;
+    gap: 20px !important;
+  }
+
+  footer {
+    padding: 30px 18px !important;
+  }
+
+  /* Start form */
+  .start-page {
+    padding: 18px 12px 36px !important;
+  }
+
+  .start-box {
+    width: 100% !important;
+    padding: 28px 18px !important;
+    border-radius: 26px !important;
+  }
+
+  .start-box h1 {
+    font-size: clamp(38px, 11vw, 54px) !important;
+    line-height: .98 !important;
+    letter-spacing: -1.5px !important;
+  }
+
+  .start-box > p {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .full-width {
+    grid-column: auto !important;
+  }
+
+  .form-grid input {
+    width: 100% !important;
+    min-height: 58px !important;
+    font-size: 16px !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .start-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Quiz: compact, touch-friendly, premium */
+  .quiz-page {
+    padding: 18px 12px 34px !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+  }
+
+  .quiz-top {
+    padding: 4px 4px 10px !important;
+    font-size: 14px !important;
+  }
+
+  .difficulty-label {
+    padding: 8px 12px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+  }
+
+  .progress {
+    height: 7px !important;
+    margin-bottom: 14px !important;
+    border-radius: 999px !important;
+  }
+
+  .question-card {
+    padding: 20px 16px 18px !important;
+    border-radius: 26px !important;
+    box-shadow: 0 18px 45px rgba(16, 34, 69, .10) !important;
+  }
+
+  .question-header {
+    margin-bottom: 16px !important;
+  }
+
+  .question-number {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 15px !important;
+    border-radius: 13px !important;
+  }
+
+  .question-card h1 {
+    font-size: clamp(25px, 7vw, 38px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -.7px !important;
+    margin: 0 0 18px !important;
+  }
+
+  .options {
+    gap: 9px !important;
+  }
+
+  .option {
+    min-height: 62px !important;
+    padding: 10px 13px !important;
+    border-radius: 17px !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    text-align: left !important;
+  }
+
+  .option > span {
+    min-width: 38px !important;
+    width: 38px !important;
+    height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 10px !important;
+    border-radius: 11px !important;
+  }
+
+  .next-button {
+    width: 100% !important;
+    margin-top: 14px !important;
+    min-height: 58px !important;
+  }
+
+  /* Result */
+  .result-box {
+    padding: 24px 16px !important;
+  }
+
+  .result-preview-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .result-preview-card {
+    min-height: 118px !important;
+    padding: 15px 10px !important;
+    border-radius: 18px !important;
+  }
+
+  .result-preview-card strong {
+    font-size: 17px !important;
+  }
+
+  .unlock-offer {
+    padding: 16px !important;
+    border-radius: 17px !important;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 9px !important;
+  }
+
+  .analysis-card {
+    padding: 15px 11px !important;
+    border-radius: 17px !important;
+  }
+
+  .analysis-card strong {
+    font-size: 20px !important;
+  }
+
+  .answer-review-item {
+    padding: 13px 11px !important;
+    gap: 8px !important;
+    font-size: 12px !important;
+  }
+
+  .certificate-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .verification-form {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .navbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .logo span {
+    font-size: 20px !important;
+  }
+
+  .nav-cta {
+    padding: 10px 11px !important;
+    font-size: 12px !important;
+  }
+
+  .hero {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .hero h1 {
+    font-size: 41px !important;
+  }
+
+  .question-card h1 {
+    font-size: 24px !important;
+  }
+
+  .option {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .logo {
+    align-self: flex-start !important;
+  }
+
+  .nav-links {
+    order: 2 !important;
+    display: flex !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .nav-links a,
+  .nav-text-button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    font-size: 11px !important;
+    white-space: normal !important;
+    padding: 6px 2px !important;
+  }
+
+  .nav-right {
+    order: 3 !important;
+    display: flex !important;
+    width: 100% !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .language-switcher {
+    flex: 1 !important;
+    width: auto !important;
+    max-width: none !important;
+    overflow: hidden !important;
+  }
+
+  .language-switcher button {
+    padding: 9px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .nav-cta {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 10px 8px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .app {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+}

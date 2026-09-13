@@ -1,275 +1,170 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
+import "./App_mobile_premium.css";
 
 const API = "https://iqnova-challenge.onrender.com";
 
 const questions = [
   {
-    q: {
-      english: "A number is doubled, then 6 is added. The result is 20. What is the number?",
-      hindi: "एक संख्या को दोगुना करके उसमें 6 जोड़ा जाता है। परिणाम 20 आता है। संख्या क्या है?",
-      hinglish: "Ek number ko double karke usme 6 add kiya jata hai. Result 20 hai. Number kya hai?"
-    },
-    options: {
-      english: ["6", "7", "8", "9"],
-      hindi: ["6", "7", "8", "9"],
-      hinglish: ["6", "7", "8", "9"]
-    },
-    answer: 2,
-    difficulty: "Easy"
-  },
-  {
-    q: {
-      english: "Which number comes next? 2, 6, 12, 20, 30, ?",
-      hindi: "अगली संख्या कौन-सी होगी? 2, 6, 12, 20, 30, ?",
-      hinglish: "Agla number kaunsa hoga? 2, 6, 12, 20, 30, ?"
-    },
-    options: {
-      english: ["40", "42", "44", "46"],
-      hindi: ["40", "42", "44", "46"],
-      hinglish: ["40", "42", "44", "46"]
-    },
+    difficulty: "Easy",
+    en: "What comes next? 2, 4, 6, 8, ?",
+    hi: "अगला अंक कौन सा होगा? 2, 4, 6, 8, ?",
+    hinglish: "Agla number kaunsa hoga? 2, 4, 6, 8, ?",
+    options: ["9", "10", "11", "12"],
     answer: 1,
-    difficulty: "Easy"
   },
   {
-    q: {
-      english: "If all Bloops are Razzies and all Razzies are Lazzies, which must be true?",
-      hindi: "यदि सभी Bloops, Razzies हैं और सभी Razzies, Lazzies हैं, तो क्या सही होना आवश्यक है?",
-      hinglish: "Agar sabhi Bloops, Razzies hain aur sabhi Razzies, Lazzies hain, toh kya zaroor true hoga?"
-    },
-    options: {
-      english: ["All Bloops are Lazzies", "All Lazzies are Bloops", "No Bloops are Lazzies", "Some Lazzies are not Razzies"],
-      hindi: ["सभी Bloops, Lazzies हैं", "सभी Lazzies, Bloops हैं", "कोई Bloop, Lazzies नहीं है", "कुछ Lazzies, Razzies नहीं हैं"],
-      hinglish: ["Sabhi Bloops, Lazzies hain", "Sabhi Lazzies, Bloops hain", "Koi Bloop, Lazzies nahi hai", "Kuch Lazzies, Razzies nahi hain"]
-    },
-    answer: 0,
-    difficulty: "Easy"
+    difficulty: "Easy",
+    en: "Which one is different? Apple, Mango, Carrot, Banana",
+    hi: "इनमें से अलग कौन सा है? सेब, आम, गाजर, केला",
+    hinglish: "Inmein se alag kaunsa hai? Apple, Mango, Carrot, Banana",
+    options: ["Apple", "Mango", "Carrot", "Banana"],
+    answer: 2,
   },
   {
-    q: {
-      english: "A clock shows 3:15. What is the smaller angle between the hands?",
-      hindi: "घड़ी में 3:15 बज रहे हैं। दोनों सुइयों के बीच छोटा कोण कितना है?",
-      hinglish: "Clock mein 3:15 baj rahe hain. Dono hands ke beech chhota angle kitna hai?"
-    },
-    options: {
-      english: ["0°", "7.5°", "15°", "30°"],
-      hindi: ["0°", "7.5°", "15°", "30°"],
-      hinglish: ["0°", "7.5°", "15°", "30°"]
-    },
+    difficulty: "Easy",
+    en: "A box has 5 red balls and 5 blue balls. How many balls are there in total?",
+    hi: "एक डिब्बे में 5 लाल और 5 नीली गेंदें हैं। कुल कितनी गेंदें हैं?",
+    hinglish: "Ek box mein 5 red aur 5 blue balls hain. Total kitni balls hain?",
+    options: ["8", "9", "10", "12"],
+    answer: 2,
+  },
+  {
+    difficulty: "Easy",
+    en: "If today is Monday, what day will it be after 3 days?",
+    hi: "अगर आज सोमवार है, तो 3 दिन बाद कौन सा दिन होगा?",
+    hinglish: "Agar aaj Monday hai, to 3 din baad kaunsa day hoga?",
+    options: ["Tuesday", "Wednesday", "Thursday", "Friday"],
+    answer: 2,
+  },
+  {
+    difficulty: "Easy",
+    en: "Which number is missing? 5, 10, 15, 20, ?",
+    hi: "खाली स्थान पर कौन सा अंक आएगा? 5, 10, 15, 20, ?",
+    hinglish: "Missing number kaunsa hoga? 5, 10, 15, 20, ?",
+    options: ["22", "24", "25", "30"],
+    answer: 2,
+  },
+
+  {
+    difficulty: "Hard",
+    en: "What comes next? 1, 4, 9, 16, ?",
+    hi: "अगला अंक कौन सा होगा? 1, 4, 9, 16, ?",
+    hinglish: "Agla number kaunsa hoga? 1, 4, 9, 16, ?",
+    options: ["20", "24", "25", "36"],
+    answer: 2,
+  },
+  {
+    difficulty: "Hard",
+    en: "Book is to Reading as Fork is to ____.",
+    hi: "पुस्तक का संबंध पढ़ने से है, उसी तरह कांटे का संबंध किससे है?",
+    hinglish: "Book ka relation Reading se hai, waise Fork ka relation kis se hai?",
+    options: ["Writing", "Eating", "Sleeping", "Running"],
     answer: 1,
-    difficulty: "Easy"
   },
   {
-    q: {
-      english: "If CAT = 24 and DOG = 26 using A=1, B=2... what is BIRD?",
-      hindi: "यदि A=1, B=2... के अनुसार CAT = 24 और DOG = 26 है, तो BIRD क्या होगा?",
-      hinglish: "A=1, B=2... ke hisaab se CAT = 24 aur DOG = 26 hai, toh BIRD kya hoga?"
-    },
-    options: {
-      english: ["31", "33", "35", "37"],
-      hindi: ["31", "33", "35", "37"],
-      hinglish: ["31", "33", "35", "37"]
-    },
-    answer: 1,
-    difficulty: "Easy"
-  },
-  {
-    q: {
-      english: "Find the missing number: 3, 9, 27, 81, ?",
-      hindi: "लुप्त संख्या ज्ञात करें: 3, 9, 27, 81, ?",
-      hinglish: "Missing number nikalo: 3, 9, 27, 81, ?"
-    },
-    options: {
-      english: ["162", "189", "243", "324"],
-      hindi: ["162", "189", "243", "324"],
-      hinglish: ["162", "189", "243", "324"]
-    },
-    answer: 2,
-    difficulty: "Hard"
-  },
-  {
-    q: {
-      english: "A farmer has 17 sheep. All but 9 run away. How many remain?",
-      hindi: "एक किसान के पास 17 भेड़ें हैं। 9 को छोड़कर बाकी सभी भाग जाती हैं। कितनी बचीं?",
-      hinglish: "Ek farmer ke paas 17 sheep hain. 9 ko chhodkar baaki sab bhaag gayi. Kitni bachi?"
-    },
-    options: {
-      english: ["8", "9", "17", "26"],
-      hindi: ["8", "9", "17", "26"],
-      hinglish: ["8", "9", "17", "26"]
-    },
-    answer: 1,
-    difficulty: "Hard"
-  },
-  {
-    q: {
-      english: "If MONDAY is coded as 1234567, how would DAY be coded?",
-      hindi: "यदि MONDAY को 1234567 के रूप में कोड किया गया है, तो DAY कैसे कोड होगा?",
-      hinglish: "Agar MONDAY ko 1234567 code kiya gaya hai, toh DAY ka code kya hoga?"
-    },
-    options: {
-      english: ["567", "5671", "671", "712"],
-      hindi: ["567", "5671", "671", "712"],
-      hinglish: ["567", "5671", "671", "712"]
-    },
-    answer: 0,
-    difficulty: "Hard"
-  },
-  {
-    q: {
-      english: "Which number does not belong? 16, 25, 36, 49, 63, 81",
-      hindi: "इनमें से कौन-सी संख्या अलग है? 16, 25, 36, 49, 63, 81",
-      hinglish: "Inmein se kaunsa number alag hai? 16, 25, 36, 49, 63, 81"
-    },
-    options: {
-      english: ["25", "36", "63", "81"],
-      hindi: ["25", "36", "63", "81"],
-      hinglish: ["25", "36", "63", "81"]
-    },
-    answer: 2,
-    difficulty: "Hard"
-  },
-  {
-    q: {
-      english: "A train travels 60 km in 45 minutes. At the same speed, how far in 2 hours?",
-      hindi: "एक ट्रेन 45 मिनट में 60 किमी चलती है। उसी गति से 2 घंटे में कितनी दूरी तय करेगी?",
-      hinglish: "Ek train 45 minutes mein 60 km chalti hai. Same speed par 2 hours mein kitni distance jayegi?"
-    },
-    options: {
-      english: ["120 km", "140 km", "160 km", "180 km"],
-      hindi: ["120 किमी", "140 किमी", "160 किमी", "180 किमी"],
-      hinglish: ["120 km", "140 km", "160 km", "180 km"]
-    },
-    answer: 2,
-    difficulty: "Hard"
-  },
-  {
-    q: {
-      english: "What comes next? 1, 1, 2, 3, 5, 8, 13, ?",
-      hindi: "अगला क्या आएगा? 1, 1, 2, 3, 5, 8, 13, ?",
-      hinglish: "Agla kya aayega? 1, 1, 2, 3, 5, 8, 13, ?"
-    },
-    options: {
-      english: ["18", "20", "21", "24"],
-      hindi: ["18", "20", "21", "24"],
-      hinglish: ["18", "20", "21", "24"]
-    },
-    answer: 2,
-    difficulty: "Very Hard"
-  },
-  {
-    q: {
-      english: "If 5 machines make 5 items in 5 minutes, how long would 100 machines take to make 100 items?",
-      hindi: "यदि 5 मशीनें 5 मिनट में 5 वस्तुएँ बनाती हैं, तो 100 मशीनें 100 वस्तुएँ कितने समय में बनाएंगी?",
-      hinglish: "Agar 5 machines 5 minutes mein 5 items banati hain, toh 100 machines 100 items kitne time mein banayengi?"
-    },
-    options: {
-      english: ["5 minutes", "20 minutes", "100 minutes", "500 minutes"],
-      hindi: ["5 मिनट", "20 मिनट", "100 मिनट", "500 मिनट"],
-      hinglish: ["5 minutes", "20 minutes", "100 minutes", "500 minutes"]
-    },
-    answer: 0,
-    difficulty: "Very Hard"
-  },
-  {
-    q: {
-      english: "A sequence follows: 2, 5, 11, 23, 47, ?. What comes next?",
-      hindi: "एक श्रृंखला है: 2, 5, 11, 23, 47, ?. अगला क्या होगा?",
-      hinglish: "Sequence hai: 2, 5, 11, 23, 47, ?. Agla kya hoga?"
-    },
-    options: {
-      english: ["91", "94", "95", "97"],
-      hindi: ["91", "94", "95", "97"],
-      hinglish: ["91", "94", "95", "97"]
-    },
-    answer: 2,
-    difficulty: "Very Hard"
-  },
-  {
-    q: {
-      english: "A man faces North. He turns right, then right, then left. Which direction is he facing?",
-      hindi: "एक व्यक्ति उत्तर की ओर देख रहा है। वह दाएँ, फिर दाएँ और फिर बाएँ मुड़ता है। अब वह किस दिशा में है?",
-      hinglish: "Ek aadmi North ki taraf face kar raha hai. Woh right, phir right aur phir left turn karta hai. Ab woh kis direction mein hai?"
-    },
-    options: {
-      english: ["North", "South", "East", "West"],
-      hindi: ["उत्तर", "दक्षिण", "पूर्व", "पश्चिम"],
-      hinglish: ["North", "South", "East", "West"]
-    },
-    answer: 2,
-    difficulty: "Very Hard"
-  },
-  {
-    q: {
-      english: "If some A are B, all B are C, and no C are D, which statement must be true?",
-      hindi: "यदि कुछ A, B हैं; सभी B, C हैं; और कोई C, D नहीं है, तो कौन-सा कथन आवश्यक रूप से सही है?",
-      hinglish: "Agar kuch A, B hain; sabhi B, C hain; aur koi C, D nahi hai, toh kaunsa statement zaroor true hai?"
-    },
-    options: {
-      english: ["Some A are C", "All A are C", "Some A are D", "No A are B"],
-      hindi: ["कुछ A, C हैं", "सभी A, C हैं", "कुछ A, D हैं", "कोई A, B नहीं है"],
-      hinglish: ["Kuch A, C hain", "Sabhi A, C hain", "Kuch A, D hain", "Koi A, B nahi hai"]
-    },
-    answer: 0,
-    difficulty: "Very Hard"
-  },
-  {
-    q: {
-      english: "Three switches control three bulbs in another room. You may enter the room only once. How can you identify each switch?",
-      hindi: "तीन स्विच दूसरे कमरे में तीन बल्ब नियंत्रित करते हैं। आप कमरे में केवल एक बार जा सकते हैं। हर स्विच की पहचान कैसे करेंगे?",
-      hinglish: "Teen switches doosre room ke teen bulbs ko control karte hain. Aap room mein sirf ek baar ja sakte ho. Har switch ko kaise identify karoge?"
-    },
-    options: {
-      english: ["Turn all switches on", "Use heat and light by switching one on, one briefly on, then off", "Turn all switches off", "Impossible"],
-      hindi: ["सभी स्विच चालू करें", "गर्मी और रोशनी का उपयोग करें: एक चालू रखें, एक थोड़ी देर चालू करके बंद करें", "सभी स्विच बंद करें", "असंभव है"],
-      hinglish: ["Sabhi switches ON kar do", "Heat aur light use karo: ek ON rakho, ek ko thodi der ON karke OFF karo", "Sabhi switches OFF kar do", "Impossible hai"]
-    },
-    answer: 1,
-    difficulty: "Extreme"
-  },
-  {
-    q: {
-      english: "A father is 4 times as old as his son. In 20 years he will be twice as old. How old is the son now?",
-      hindi: "एक पिता अपने बेटे से 4 गुना बड़ा है। 20 साल बाद उसकी उम्र बेटे की उम्र से दोगुनी होगी। बेटे की वर्तमान उम्र क्या है?",
-      hinglish: "Ek father apne son se 4 times bada hai. 20 saal baad father ki age son se double hogi. Son ki abhi age kya hai?"
-    },
-    options: {
-      english: ["5", "10", "15", "20"],
-      hindi: ["5", "10", "15", "20"],
-      hinglish: ["5", "10", "15", "20"]
-    },
-    answer: 1,
-    difficulty: "Extreme"
-  },
-  {
-    q: {
-      english: "What number replaces ?: 4, 7, 13, 25, 49, ?",
-      hindi: "प्रश्नचिह्न की जगह कौन-सी संख्या आएगी? 4, 7, 13, 25, 49, ?",
-      hinglish: "Question mark ki jagah kaunsa number aayega? 4, 7, 13, 25, 49, ?"
-    },
-    options: {
-      english: ["73", "85", "91", "97"],
-      hindi: ["73", "85", "91", "97"],
-      hinglish: ["73", "85", "91", "97"]
-    },
+    difficulty: "Hard",
+    en: "Which number does NOT belong? 3, 6, 9, 12, 14",
+    hi: "कौन सा अंक इस क्रम में फिट नहीं बैठता? 3, 6, 9, 12, 14",
+    hinglish: "Kaunsa number is pattern mein fit nahi hota? 3, 6, 9, 12, 14",
+    options: ["6", "9", "12", "14"],
     answer: 3,
-    difficulty: "Extreme"
   },
   {
-    q: {
-      english: "You have 8 identical-looking balls. One is heavier. Using a balance scale only twice, what is the maximum number of balls you can always identify the heavier one from?",
-      hindi: "आपके पास एक जैसी दिखने वाली 8 गेंदें हैं। एक गेंद भारी है। केवल दो बार तराजू का उपयोग करके अधिकतम कितनी गेंदों में से भारी गेंद को निश्चित रूप से पहचाना जा सकता है?",
-      hinglish: "Aapke paas 8 same-looking balls hain. Ek ball heavy hai. Balance scale ko sirf 2 baar use karke maximum kitni balls mein se heavy ball ko pakka identify kar sakte ho?"
-    },
-    options: {
-      english: ["6", "7", "8", "9"],
-      hindi: ["6", "7", "8", "9"],
-      hinglish: ["6", "7", "8", "9"]
-    },
+    difficulty: "Hard",
+    en: "If 3 cats catch 3 mice in 3 minutes, how many mice can 1 cat catch in 3 minutes?",
+    hi: "यदि 3 बिल्लियाँ 3 मिनट में 3 चूहे पकड़ती हैं, तो 1 बिल्ली 3 मिनट में कितने चूहे पकड़ेगी?",
+    hinglish: "Agar 3 cats 3 minutes mein 3 mice pakadti hain, to 1 cat 3 minutes mein kitni mice pakdegi?",
+    options: ["1", "2", "3", "6"],
+    answer: 0,
+  },
+  {
+    difficulty: "Hard",
+    en: "What comes next? A, C, E, G, ?",
+    hi: "अगला अक्षर कौन सा होगा? A, C, E, G, ?",
+    hinglish: "Agla letter kaunsa hoga? A, C, E, G, ?",
+    options: ["H", "I", "J", "K"],
+    answer: 1,
+  },
+
+  {
+    difficulty: "Very Hard",
+    en: "What comes next? 2, 6, 12, 20, ?",
+    hi: "अगला अंक कौन सा होगा? 2, 6, 12, 20, ?",
+    hinglish: "Agla number kaunsa hoga? 2, 6, 12, 20, ?",
+    options: ["28", "30", "32", "36"],
+    answer: 1,
+  },
+  {
+    difficulty: "Very Hard",
+    en: "A clock shows 3:00. What is the angle between the hands?",
+    hi: "घड़ी में 3:00 बज रहे हैं। दोनों सुइयों के बीच कितना कोण होगा?",
+    hinglish: "Clock mein 3:00 baj rahe hain. Dono hands ke beech kitna angle hoga?",
+    options: ["45°", "60°", "90°", "120°"],
     answer: 2,
-    difficulty: "Extreme"
-  }
+  },
+  {
+    difficulty: "Very Hard",
+    en: "If all BLOPS are ZIPS, which statement must be true?",
+    hi: "यदि सभी BLOPS, ZIPS हैं, तो इनमें से कौन सा कथन निश्चित रूप से सही है?",
+    hinglish: "Agar saare BLOPS, ZIPS hain, to kaunsi baat definitely true hai?",
+    options: [
+      "All BLOPS are ZIPS",
+      "All ZIPS are BLOPS",
+      "All BLOPS are RED",
+      "No BLOPS are ZIPS",
+    ],
+    answer: 0,
+  },
+  {
+    difficulty: "Very Hard",
+    en: "What comes next? 4, 7, 13, 25, ?",
+    hi: "अगला अंक कौन सा होगा? 4, 7, 13, 25, ?",
+    hinglish: "Agla number kaunsa hoga? 4, 7, 13, 25, ?",
+    options: ["37", "45", "49", "51"],
+    answer: 2,
+  },
+  {
+    difficulty: "Very Hard",
+    en: "A person walks 5 km north and then 5 km east. Which direction is he from the starting point?",
+    hi: "एक व्यक्ति 5 किमी उत्तर और फिर 5 किमी पूर्व जाता है। वह शुरुआती स्थान से किस दिशा में है?",
+    hinglish: "Ek person 5 km north aur phir 5 km east jata hai. Starting point se woh kis direction mein hai?",
+    options: ["North-West", "North-East", "South-East", "South-West"],
+    answer: 1,
+  },
+
+  {
+    difficulty: "Extreme",
+    en: "What comes next? 3, 5, 9, 17, 33, ?",
+    hi: "अगला अंक कौन सा होगा? 3, 5, 9, 17, 33, ?",
+    hinglish: "Agla number kaunsa hoga? 3, 5, 9, 17, 33, ?",
+    options: ["49", "57", "65", "67"],
+    answer: 2,
+  },
+  {
+    difficulty: "Extreme",
+    en: "If A=1, B=2, C=3... what is the value of CAB?",
+    hi: "यदि A=1, B=2, C=3... तो CAB का मान कितना होगा?",
+    hinglish: "A=1, B=2, C=3... to CAB ki total value kya hogi?",
+    options: ["5", "6", "7", "8"],
+    answer: 1,
+  },
+  {
+    difficulty: "Extreme",
+    en: "A pattern follows: 1 → 3, 2 → 6, 3 → 11, 4 → 18. Then 5 → ?",
+    hi: "एक पैटर्न है: 1 → 3, 2 → 6, 3 → 11, 4 → 18। तो 5 → ?",
+    hinglish: "Pattern dekho: 1 → 3, 2 → 6, 3 → 11, 4 → 18. To 5 → ?",
+    options: ["25", "27", "29", "31"],
+    answer: 1,
+  },
+  {
+    difficulty: "Extreme",
+    en: "Which number completes the pattern? 2, 3, 5, 9, 17, ?",
+    hi: "कौन सा अंक इस पैटर्न को पूरा करेगा? 2, 3, 5, 9, 17, ?",
+    hinglish: "Kaunsa number pattern complete karega? 2, 3, 5, 9, 17, ?",
+    options: ["25", "31", "33", "35"],
+    answer: 2,
+  },
 ];
 
 const translations = {
