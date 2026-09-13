@@ -297,95 +297,319 @@ async function sendPaymentReminderEmail(session, paymentLink) {
   }
 }
 
-function createCertificatePdf(session) {
+function createCertificatePdf({
+  name,
+  score,
+  performance,
+  certificateId,
+  completedAt,
+}) {
   return new Promise((resolve, reject) => {
-    const result = session.result;
+    const PDFDocument = require("pdfkit");
     const doc = new PDFDocument({
       size: "A4",
+      layout: "landscape",
       margin: 0,
-      info: {
-        Title: "IQNova Certificate of Achievement",
-        Author: "IQNova",
-      },
     });
 
     const chunks = [];
+
     doc.on("data", (chunk) => chunks.push(chunk));
     doc.on("end", () => resolve(Buffer.concat(chunks)));
     doc.on("error", reject);
 
-    const navy = "#102A56";
-    const gold = "#B28A4A";
-    const cream = "#F8F4EA";
-    const dark = "#182238";
-    const light = "#E8E1D2";
+    const W = doc.page.width;
+    const H = doc.page.height;
 
-    doc.rect(0, 0, 595.28, 841.89).fill(cream);
-    doc.rect(22, 22, 551.28, 797.89).lineWidth(2).stroke(navy);
-    doc.rect(31, 31, 533.28, 779.89).lineWidth(1).stroke(gold);
+    // Premium palette
+    const NAVY = "#081B33";
+    const NAVY2 = "#102B4A";
+    const CREAM = "#F8F3E7";
+    const GOLD = "#C9A24D";
+    const GOLD2 = "#E4C77B";
+    const WHITE = "#FFFFFF";
+    const MUTED = "#6D7480";
 
-    doc.fillColor(navy).fontSize(14).font("Helvetica-Bold")
-      .text("IQNOVA — IQ CHALLENGE", 0, 78, { align: "center" });
+    // Background
+    doc.rect(0, 0, W, H).fill(CREAM);
 
-    doc.fillColor(gold).fontSize(12).font("Helvetica")
-      .text("CERTIFICATE OF ACHIEVEMENT", 0, 125, { align: "center" });
+    // Navy outer frame
+    doc
+      .lineWidth(16)
+      .strokeColor(NAVY)
+      .rect(18, 18, W - 36, H - 36)
+      .stroke();
 
-    doc.fillColor(dark).fontSize(30).font("Helvetica-Bold")
-      .text("Certificate of Achievement", 0, 165, { align: "center" });
+    // Gold inner frame
+    doc
+      .lineWidth(2)
+      .strokeColor(GOLD)
+      .rect(35, 35, W - 70, H - 70)
+      .stroke();
 
-    doc.fillColor("#666").fontSize(12).font("Helvetica")
-      .text("This certificate is proudly presented to", 0, 225, { align: "center" });
+    // Second subtle frame
+    doc
+      .lineWidth(0.8)
+      .strokeColor(GOLD2)
+      .rect(43, 43, W - 86, H - 86)
+      .stroke();
 
-    doc.fillColor(navy).fontSize(28).font("Helvetica-Bold")
-      .text(safeName(session.name), 70, 260, {
-        width: 455,
+    // Decorative corner blocks
+    const corner = (x, y, flipX = 1, flipY = 1) => {
+      doc.save();
+      doc.translate(x, y);
+      doc.scale(flipX, flipY);
+
+      doc
+        .lineWidth(2)
+        .strokeColor(GOLD)
+        .moveTo(0, 35)
+        .lineTo(0, 0)
+        .lineTo(35, 0)
+        .stroke();
+
+      doc
+        .lineWidth(1)
+        .strokeColor(GOLD2)
+        .moveTo(8, 27)
+        .lineTo(8, 8)
+        .lineTo(27, 8)
+        .stroke();
+
+      doc.restore();
+    };
+
+    corner(52, 52);
+    corner(W - 52, 52, -1, 1);
+    corner(52, H - 52, 1, -1);
+    corner(W - 52, H - 52, -1, -1);
+
+    // Top brand
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(13)
+      .fillColor(GOLD)
+      .text("IQNOVA", 0, 70, {
+        width: W,
+        align: "center",
+        characterSpacing: 3,
+      });
+
+    doc
+      .font("Helvetica")
+      .fontSize(8)
+      .fillColor(NAVY2)
+      .text("IQ CHALLENGE", 0, 88, {
+        width: W,
+        align: "center",
+        characterSpacing: 2,
+      });
+
+    // Main title
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(30)
+      .fillColor(NAVY)
+      .text("CERTIFICATE OF ACHIEVEMENT", 0, 120, {
+        width: W,
         align: "center",
       });
 
-    doc.moveTo(150, 305).lineTo(445, 305).lineWidth(1).stroke(gold);
+    // Gold divider
+    doc
+      .lineWidth(1.5)
+      .strokeColor(GOLD)
+      .moveTo(W / 2 - 125, 160)
+      .lineTo(W / 2 + 125, 160)
+      .stroke();
 
-    doc.fillColor("#666").fontSize(12).font("Helvetica")
-      .text("for completing the IQNova educational intelligence challenge", 0, 335, {
+    // Small subtitle
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .fillColor(MUTED)
+      .text("This certificate is proudly presented to", 0, 178, {
+        width: W,
         align: "center",
       });
 
-    const boxes = [
-      ["SCORE", `${result.score} / 100`],
-      ["PERFORMANCE", result.performance],
-      ["COMPLETION TIME", result.formattedTime],
-    ];
-
-    let x = 72;
-    boxes.forEach(([label, value], i) => {
-      const width = i === 1 ? 205 : 150;
-      doc.roundedRect(x, 395, width, 92, 12).lineWidth(1).stroke(light);
-      doc.fillColor(gold).fontSize(10).font("Helvetica-Bold")
-        .text(label, x, 417, { width, align: "center" });
-      doc.fillColor(navy).fontSize(i === 1 ? 14 : 20).font("Helvetica-Bold")
-        .text(value, x + 8, 445, { width: width - 16, align: "center" });
-      x += width + 8;
-    });
-
-    doc.fillColor("#666").fontSize(11).font("Helvetica")
-      .text(`Completion date: ${new Date(session.completed_at).toLocaleDateString("en-IN")}`, 0, 535, {
+    // Student name
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(27)
+      .fillColor(NAVY)
+      .text(name || "Participant", 70, 205, {
+        width: W - 140,
         align: "center",
       });
 
-    doc.fillColor(navy).fontSize(12).font("Helvetica-Bold")
-      .text(`Certificate ID: ${session.certificate_id}`, 0, 570, {
-        align: "center",
-      });
+    // Name underline
+    doc
+      .lineWidth(1)
+      .strokeColor(GOLD2)
+      .moveTo(W / 2 - 150, 242)
+      .lineTo(W / 2 + 150, 242)
+      .stroke();
 
-    doc.fillColor("#777").fontSize(9).font("Helvetica")
+    // Achievement statement
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .fillColor(MUTED)
       .text(
-        "This certificate represents performance in the IQNova educational challenge and is not a clinically validated IQ assessment.",
-        75,
-        690,
-        { width: 445, align: "center" }
+        "for successfully completing the IQNova educational IQ Challenge",
+        0,
+        258,
+        {
+          width: W,
+          align: "center",
+        }
       );
 
-    doc.fillColor(gold).fontSize(10).font("Helvetica-Bold")
-      .text("IQNOVA", 0, 755, { align: "center" });
+    // Score cards
+    const cardY = 295;
+    const cardW = 145;
+    const cardH = 70;
+    const gap = 18;
+    const totalW = cardW * 3 + gap * 2;
+    const startX = (W - totalW) / 2;
+
+    const drawCard = (x, title, value) => {
+      // shadow
+      doc
+        .roundedRect(x + 3, cardY + 3, cardW, cardH, 8)
+        .fill("#DDD7C9");
+
+      // card
+      doc
+        .roundedRect(x, cardY, cardW, cardH, 8)
+        .fill(WHITE);
+
+      doc
+        .lineWidth(1)
+        .strokeColor(GOLD2)
+        .roundedRect(x, cardY, cardW, cardH, 8)
+        .stroke();
+
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(8)
+        .fillColor(MUTED)
+        .text(title.toUpperCase(), x, cardY + 13, {
+          width: cardW,
+          align: "center",
+          characterSpacing: 1,
+        });
+
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(19)
+        .fillColor(NAVY)
+        .text(String(value), x + 5, cardY + 34, {
+          width: cardW - 10,
+          align: "center",
+        });
+    };
+
+    drawCard(startX, "Challenge Score", `${score}/100`);
+    drawCard(startX + cardW + gap, "Performance", performance || "—");
+    drawCard(
+      startX + (cardW + gap) * 2,
+      "Certificate ID",
+      certificateId || "—"
+    );
+
+    // Completion date
+    const dateText = completedAt
+      ? new Date(completedAt).toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })
+      : new Date().toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        });
+
+    doc
+      .font("Helvetica")
+      .fontSize(9)
+      .fillColor(MUTED)
+      .text(`Completed on ${dateText}`, 0, 385, {
+        width: W,
+        align: "center",
+      });
+
+    // Seal
+    const sealX = W - 105;
+    const sealY = H - 115;
+
+    doc
+      .circle(sealX, sealY, 34)
+      .fill(NAVY);
+
+    doc
+      .lineWidth(2)
+      .strokeColor(GOLD)
+      .circle(sealX, sealY, 29)
+      .stroke();
+
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(8)
+      .fillColor(GOLD2)
+      .text("IQNOVA", sealX - 25, sealY - 7, {
+        width: 50,
+        align: "center",
+      });
+
+    doc
+      .font("Helvetica")
+      .fontSize(5.5)
+      .fillColor(WHITE)
+      .text("ACHIEVEMENT", sealX - 27, sealY + 4, {
+        width: 54,
+        align: "center",
+      });
+
+    // Verification line
+    doc
+      .font("Helvetica")
+      .fontSize(7.5)
+      .fillColor(MUTED)
+      .text(
+        "Certificate verification available through the IQNova certificate portal",
+        55,
+        H - 91,
+        {
+          width: W - 110,
+          align: "center",
+        }
+      );
+
+    // Disclaimer
+    doc
+      .font("Helvetica")
+      .fontSize(6.5)
+      .fillColor("#777777")
+      .text(
+        "This certificate represents performance in the IQNova educational challenge and is not a clinically validated IQ assessment.",
+        55,
+        H - 67,
+        {
+          width: W - 110,
+          align: "center",
+        }
+      );
+
+    // Tiny gold bottom accent
+    doc
+      .lineWidth(2)
+      .strokeColor(GOLD)
+      .moveTo(W / 2 - 65, H - 49)
+      .lineTo(W / 2 + 65, H - 49)
+      .stroke();
 
     doc.end();
   });
