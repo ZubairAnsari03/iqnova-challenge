@@ -704,10 +704,16 @@ function App() {
               <span>{currentQuestion.difficulty}</span>
             </div>
 
-            <h1>{currentQuestion.q[language]}</h1>
+            <h1>
+  {language === "english"
+    ? currentQuestion.en
+    : language === "hindi"
+      ? currentQuestion.hi
+      : currentQuestion.hinglish}
+</h1>
 
             <div className="options">
-              {currentQuestion.options[language].map((option, index) => (
+              {currentQuestion.options.map((option, index) => (
                 <button
                   key={index}
                   className={answers[current] === index ? "option selected" : "option"}
