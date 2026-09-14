@@ -244,12 +244,6 @@ async function createOrGetPaymentLink(session) {
 
       reminder_enable: false,
 
-      callback_url: `${FRONTEND_URL}/?payment=success&sessionId=${encodeURIComponent(
-        session.session_id
-      )}`,
-
-      callback_method: "get",
-
       notes: {
         product: "IQNova IQ Challenge",
         session_id: session.session_id,
