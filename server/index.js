@@ -353,8 +353,12 @@ function createCertificatePdf({
   score,
   performance,
   certificateId,
+  certificate_id,
   completedAt,
+  completed_at,
 }) {
+  certificateId = certificateId || certificate_id;
+  completedAt = completedAt || completed_at;
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({
       size: "A4",
