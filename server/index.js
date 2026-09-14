@@ -145,6 +145,7 @@ async function getSession(sessionId) {
 }
 
 async function createOrGetPaymentLink(session) {
+  // 1. Database mein payment link already saved hai
   if (session.payment_link_id && session.payment_link_url) {
     return {
       id: session.payment_link_id,
@@ -153,32 +154,90 @@ async function createOrGetPaymentLink(session) {
     };
   }
 
-  // First try to find an existing Razorpay payment link
-  try {
-    const existing = await razorpay.paymentLink.all({
-      reference_id: session.session_id,
-    });
+  // 2. Agar DB mein ID hai lekin URL missing hai, Razorpay se fetch karo
+  if (session.payment_link_id) {
+    try {
+      const existingById = await razorpay.paymentLink.fetch(
+        session.payment_link_id
+      );
 
-    const existingLink = existing?.payment_links?.find(
-      (item) => item.reference_id === session.session_id
-    );
+      if (existingById?.id) {
+        await supabase
+          .from("challenge_sessions")
+          .update({
+            payment_link_id: existingById.id,
+            payment_link_url: existingById.short_url,
+          })
+          .eq("session_id", session.session_id);
 
-    if (existingLink) {
-      await supabase
-        .from("challenge_sessions")
-        .update({
-          payment_link_id: existingLink.id,
-          payment_link_url: existingLink.short_url,
-        })
-        .eq("session_id", session.session_id);
-
-      return existingLink;
+        return existingById;
+      }
+    } catch (error) {
+      console.warn(
+        "Could not fetch saved payment link:",
+        error?.message || error
+      );
     }
-  } catch (error) {
-    console.warn("Could not search existing payment link:", error.message);
   }
 
-  // Create a new unique payment link
+  // 3. Razorpay mein reference_id se existing link find karo
+  async function findExistingPaymentLink() {
+    try {
+      const result = await razorpay.paymentLink.all({
+        reference_id: session.session_id,
+      });
+
+      const links = result?.payment_links || [];
+
+      const match = links.find(
+        (item) => item.reference_id === session.session_id
+      );
+
+      if (match) return match;
+    } catch (error) {
+      console.warn(
+        "Reference ID search failed:",
+        error?.message || error
+      );
+    }
+
+    // Fallback: saare available links mein reference_id search karo
+    try {
+      const result = await razorpay.paymentLink.all();
+
+      const links = result?.payment_links || [];
+
+      const match = links.find(
+        (item) => item.reference_id === session.session_id
+      );
+
+      if (match) return match;
+    } catch (error) {
+      console.warn(
+        "Fallback payment link search failed:",
+        error?.message || error
+      );
+    }
+
+    return null;
+  }
+
+  // 4. Create karne se pehle existing link dobara check
+  const existingLink = await findExistingPaymentLink();
+
+  if (existingLink) {
+    await supabase
+      .from("challenge_sessions")
+      .update({
+        payment_link_id: existingLink.id,
+        payment_link_url: existingLink.short_url,
+      })
+      .eq("session_id", session.session_id);
+
+    return existingLink;
+  }
+
+  // 5. Existing nahi mila to naya unique Payment Link create karo
   try {
     const link = await razorpay.paymentLink.create({
       amount: AMOUNT_PAISE,
@@ -186,18 +245,26 @@ async function createOrGetPaymentLink(session) {
       accept_partial: false,
       reference_id: session.session_id,
       description: "IQNova Full Result & Certificate",
+
       customer: {
         name: session.name,
         email: session.email,
       },
+
       notify: {
         email: false,
         sms: false,
         whatsapp: false,
       },
+
       reminder_enable: false,
-      callback_url: `${FRONTEND_URL}/?payment=success&sessionId=${encodeURIComponent(session.session_id)}`,
+
+      callback_url: `${FRONTEND_URL}/?payment=success&sessionId=${encodeURIComponent(
+        session.session_id
+      )}`,
+
       callback_method: "get",
+
       notes: {
         product: "IQNova IQ Challenge",
         session_id: session.session_id,
@@ -214,30 +281,27 @@ async function createOrGetPaymentLink(session) {
 
     return link;
   } catch (error) {
-    // Razorpay says this reference_id already exists.
-    // Fetch that existing link and reuse it.
-    if (
+    // 6. Razorpay bole reference_id already exists
+    // to existing link recover karke reuse karo
+    const isDuplicateReference =
       error?.code === "BAD_REQUEST_ERROR" &&
-      String(error?.description || "").includes("reference_id")
-    ) {
-      const existing = await razorpay.paymentLink.all({
-        reference_id: session.session_id,
-      });
+      String(error?.description || "")
+        .toLowerCase()
+        .includes("reference id");
 
-      const existingLink = existing?.payment_links?.find(
-        (item) => item.reference_id === session.session_id
-      );
+    if (isDuplicateReference) {
+      const recoveredLink = await findExistingPaymentLink();
 
-      if (existingLink) {
+      if (recoveredLink) {
         await supabase
           .from("challenge_sessions")
           .update({
-            payment_link_id: existingLink.id,
-            payment_link_url: existingLink.short_url,
+            payment_link_id: recoveredLink.id,
+            payment_link_url: recoveredLink.short_url,
           })
           .eq("session_id", session.session_id);
 
-        return existingLink;
+        return recoveredLink;
       }
     }
 
