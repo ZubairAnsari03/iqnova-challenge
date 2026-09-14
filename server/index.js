@@ -1004,20 +1004,26 @@ app.post("/api/challenge/complete", async (req, res) => {
       });
     }
 
+    // Already completed: result immediately return karo
     if (session.completed_at && session.result) {
-      const paymentLink = await createOrGetPaymentLink(session);
-      await sendPaymentReminderEmail(session, paymentLink);
-
       return res.json({
         success: true,
         completed: true,
         paid: Boolean(session.paid_at),
-        paymentUrl: paymentLink.short_url,
+        result: {
+          score: session.score,
+          correctCount: session.correct_count,
+          totalQuestions: 19,
+          performance: session.performance,
+          formattedTime: session.formatted_time,
+        },
       });
     }
 
+    // Result calculate karo
     const result = calculateResult(session, answers);
 
+    // Result DB mein save karo
     const { error } = await supabase
       .from("challenge_sessions")
       .update({
@@ -1034,24 +1040,46 @@ app.post("/api/challenge/complete", async (req, res) => {
 
     if (error) throw error;
 
-    const completedSession = await getSession(sessionId);
-    const paymentLink = await createOrGetPaymentLink(completedSession);
-
-    // The email is sent as soon as the ₹19 unlock option is available.
-    await sendPaymentReminderEmail(completedSession, paymentLink);
-
+    // IMPORTANT:
+    // Result ko payment/email se block mat karo.
+    // User ko immediately result page bhejo.
     res.json({
       success: true,
       completed: true,
       paid: false,
-      paymentUrl: paymentLink.short_url,
+      result: {
+        score: result.score,
+        correctCount: result.correctCount,
+        totalQuestions: 19,
+        performance: result.performance,
+        formattedTime: result.formattedTime,
+      },
     });
+
+    // Payment link + email background mein handle honge.
+    // Inki failure se result page fail nahi hoga.
+    (async () => {
+      try {
+        const completedSession = await getSession(sessionId);
+        const paymentLink = await createOrGetPaymentLink(completedSession);
+        await sendPaymentReminderEmail(completedSession, paymentLink);
+      } catch (error) {
+        console.error(
+          "Background payment/email processing failed:",
+          error?.message || error
+        );
+      }
+    })();
+
   } catch (error) {
     console.error("Complete error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Result calculation failed.",
-    });
+
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        message: "Result calculation failed.",
+      });
+    }
   }
 });
 
