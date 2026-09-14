@@ -305,7 +305,6 @@ function createCertificatePdf({
   completedAt,
 }) {
   return new Promise((resolve, reject) => {
-    const PDFDocument = require("pdfkit");
     const doc = new PDFDocument({
       size: "A4",
       layout: "landscape",
