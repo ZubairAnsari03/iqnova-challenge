@@ -322,32 +322,40 @@ function App() {
     }
     if (savedPaid === "true") setPaymentPaid(true);
 
-    const params = new URLSearchParams(window.location.search);
-    const callbackSession = params.get("sessionId");
-    const payment = params.get("payment");
+const params = new URLSearchParams(window.location.search);
 
-    if (callbackSession) {
-      setSessionId(callbackSession);
-      localStorage.setItem("iqnova_session_id", callbackSession);
-      setPage("result");
+const callbackSession =
+  params.get("sessionId") ||
+  params.get("reference_id") ||
+  params.get("razorpay_payment_link_reference_id") ||
+  localStorage.getItem("iqnova_session_id");
 
-      if (payment === "success") {
-        const timer = setInterval(async () => {
-          try {
-            const done = await loadPaidResult(callbackSession);
-            if (done) clearInterval(timer);
-          } catch {}
-        }, 2500);
+const payment =
+  params.get("payment") ||
+  (params.get("razorpay_payment_id") ? "success" : "");
 
-        loadPaidResult(callbackSession).then((done) => {
-          if (done) clearInterval(timer);
-        });
+if (callbackSession) {
+  setSessionId(callbackSession);
+  localStorage.setItem("iqnova_session_id", callbackSession);
+  setPage("result");
 
-        setTimeout(() => clearInterval(timer), 10 * 60 * 1000);
-      }
+  if (payment === "success") {
+    const timer = setInterval(async () => {
+      try {
+        const done = await loadPaidResult(callbackSession);
+        if (done) clearInterval(timer);
+      } catch {}
+    }, 2500);
 
-      window.history.replaceState({}, "", window.location.pathname);
-    }
+    loadPaidResult(callbackSession).then((done) => {
+      if (done) clearInterval(timer);
+    });
+
+    setTimeout(() => clearInterval(timer), 10 * 60 * 1000);
+  }
+
+  window.history.replaceState({}, "", window.location.pathname);
+}
   }, []);
 
   const startChallenge = async () => {
