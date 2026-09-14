@@ -145,7 +145,7 @@ async function getSession(sessionId) {
 }
 
 async function createOrGetPaymentLink(session) {
-  // 1. Database mein payment link already saved hai
+  // DB mein payment link already saved hai
   if (session.payment_link_id && session.payment_link_url) {
     return {
       id: session.payment_link_id,
@@ -154,67 +154,29 @@ async function createOrGetPaymentLink(session) {
     };
   }
 
-  // 2. Agar DB mein ID hai lekin URL missing hai, Razorpay se fetch karo
-  if (session.payment_link_id) {
+  // Razorpay existing link find karo
+  async function findExistingPaymentLink() {
     try {
-      const existingById = await razorpay.paymentLink.fetch(
-        session.payment_link_id
+      const existing = await razorpay.paymentLink.all({
+        reference_id: session.session_id,
+        count: 10,
+      });
+
+      const links =
+        existing?.items ||
+        existing?.payment_links ||
+        [];
+
+      const existingLink = links.find(
+        (item) => item.reference_id === session.session_id
       );
 
-      if (existingById?.id) {
-        await supabase
-          .from("challenge_sessions")
-          .update({
-            payment_link_id: existingById.id,
-            payment_link_url: existingById.short_url,
-          })
-          .eq("session_id", session.session_id);
-
-        return existingById;
+      if (existingLink) {
+        return existingLink;
       }
     } catch (error) {
       console.warn(
-        "Could not fetch saved payment link:",
-        error?.message || error
-      );
-    }
-  }
-
-  // 3. Razorpay mein reference_id se existing link find karo
-  async function findExistingPaymentLink() {
-    try {
-      const result = await razorpay.paymentLink.all({
-        reference_id: session.session_id,
-      });
-
-      const links = result?.payment_links || [];
-
-      const match = links.find(
-        (item) => item.reference_id === session.session_id
-      );
-
-      if (match) return match;
-    } catch (error) {
-      console.warn(
-        "Reference ID search failed:",
-        error?.message || error
-      );
-    }
-
-    // Fallback: saare available links mein reference_id search karo
-    try {
-      const result = await razorpay.paymentLink.all();
-
-      const links = result?.payment_links || [];
-
-      const match = links.find(
-        (item) => item.reference_id === session.session_id
-      );
-
-      if (match) return match;
-    } catch (error) {
-      console.warn(
-        "Fallback payment link search failed:",
+        "Could not search existing payment link:",
         error?.message || error
       );
     }
@@ -222,7 +184,7 @@ async function createOrGetPaymentLink(session) {
     return null;
   }
 
-  // 4. Create karne se pehle existing link dobara check
+  // Pehle existing link check
   const existingLink = await findExistingPaymentLink();
 
   if (existingLink) {
@@ -237,7 +199,7 @@ async function createOrGetPaymentLink(session) {
     return existingLink;
   }
 
-  // 5. Existing nahi mila to naya unique Payment Link create karo
+  // Existing nahi mila to create karo
   try {
     const link = await razorpay.paymentLink.create({
       amount: AMOUNT_PAISE,
@@ -281,15 +243,14 @@ async function createOrGetPaymentLink(session) {
 
     return link;
   } catch (error) {
-    // 6. Razorpay bole reference_id already exists
-    // to existing link recover karke reuse karo
-    const isDuplicateReference =
-      error?.code === "BAD_REQUEST_ERROR" &&
-      String(error?.description || "")
-        .toLowerCase()
-        .includes("reference id");
+    // Agar reference_id already exists hai,
+    // existing link recover karke use karo
+    const description = String(error?.description || "").toLowerCase();
 
-    if (isDuplicateReference) {
+    if (
+      error?.code === "BAD_REQUEST_ERROR" &&
+      description.includes("reference_id")
+    ) {
       const recoveredLink = await findExistingPaymentLink();
 
       if (recoveredLink) {
