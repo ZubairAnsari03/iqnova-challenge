@@ -145,7 +145,7 @@ async function getSession(sessionId) {
 }
 
 async function createOrGetPaymentLink(session) {
-  // 1. Supabase mein link already saved hai
+  // 1. DB mein payment link already saved hai
   if (session.payment_link_id && session.payment_link_url) {
     return {
       id: session.payment_link_id,
@@ -154,34 +154,57 @@ async function createOrGetPaymentLink(session) {
     };
   }
 
-  // 2. Razorpay se existing link find karo
+  // 2. Razorpay API se existing Payment Link direct find karo
   async function findExistingPaymentLink() {
+    const keyId = process.env.RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+    const auth = Buffer.from(`${keyId}:${keySecret}`).toString("base64");
+
     try {
-      const result = await razorpay.paymentLink.all({
-        reference_id: session.session_id,
-        count: 100,
+      const url =
+        `https://api.razorpay.com/v1/payment_links` +
+        `?reference_id=${encodeURIComponent(session.session_id)}` +
+        `&count=100`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Basic ${auth}`,
+          Accept: "application/json",
+        },
       });
 
-      const links =
-        result?.items ||
-        result?.payment_links ||
-        [];
+      if (!response.ok) {
+        const text = await response.text();
+        console.warn(
+          "Razorpay existing-link lookup failed:",
+          response.status,
+          text
+        );
+        return null;
+      }
 
-      const existingLink = links.find(
+      const data = await response.json();
+
+      const links = data?.items || data?.payment_links || [];
+
+      const match = links.find(
         (item) => item.reference_id === session.session_id
       );
 
-      if (existingLink) {
-        return existingLink;
+      if (match) {
+        return match;
       }
+
+      return null;
     } catch (error) {
       console.warn(
-        "Razorpay reference search failed:",
+        "Razorpay direct lookup error:",
         error?.message || error
       );
+      return null;
     }
-
-    return null;
   }
 
   // 3. Create karne se pehle existing link check
@@ -199,7 +222,7 @@ async function createOrGetPaymentLink(session) {
     return existingLink;
   }
 
-  // 4. Existing link nahi mila to naya banao
+  // 4. Existing link nahi mila to create karo
   try {
     const link = await razorpay.paymentLink.create({
       amount: AMOUNT_PAISE,
@@ -244,12 +267,14 @@ async function createOrGetPaymentLink(session) {
     return link;
   } catch (error) {
     // 5. Agar Razorpay bole reference_id already exists,
-    // existing link ko recover karke use karo
-    const description = String(error?.description || "").toLowerCase();
+    // existing link ko direct API se recover karo
+    const description = String(
+      error?.description || ""
+    ).toLowerCase();
 
     if (
       error?.code === "BAD_REQUEST_ERROR" &&
-      description.includes("reference_id") &&
+      description.includes("reference") &&
       description.includes("already")
     ) {
       const recoveredLink = await findExistingPaymentLink();
