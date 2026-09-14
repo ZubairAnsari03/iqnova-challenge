@@ -477,7 +477,7 @@ function App() {
         return;
       }
 
-      window.open(data.shortUrl, "_blank");
+      window.location.href = data.shortUrl;
 
       const check = async () => {
         try {

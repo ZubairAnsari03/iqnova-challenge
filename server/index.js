@@ -235,6 +235,9 @@ async function createOrGetPaymentLink(session) {
         name: session.name,
         email: session.email,
       },
+      
+      callback_url: `${FRONTEND_URL}/?payment=success&sessionId=${encodeURIComponent(session.session_id)}`,
+      callback_method: "get",
 
       notify: {
         email: false,
