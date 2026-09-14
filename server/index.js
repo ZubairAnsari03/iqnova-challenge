@@ -309,6 +309,11 @@ function createCertificatePdf({
       size: "A4",
       layout: "landscape",
       margin: 0,
+      info: {
+        Title: "IQNova — Certificate of Achievement",
+        Author: "IQNova",
+        Subject: "IQNova IQ Challenge Certificate",
+      },
     });
 
     const chunks = [];
@@ -320,140 +325,187 @@ function createCertificatePdf({
     const W = doc.page.width;
     const H = doc.page.height;
 
-    // Premium palette
-    const NAVY = "#081B33";
-    const NAVY2 = "#102B4A";
-    const CREAM = "#F8F3E7";
-    const GOLD = "#C9A24D";
-    const GOLD2 = "#E4C77B";
-    const WHITE = "#FFFFFF";
-    const MUTED = "#6D7480";
+    // =========================
+    // LUXURY PALETTE
+    // =========================
+    const NAVY = "#071A33";
+    const NAVY2 = "#102A4A";
+    const NAVY3 = "#183B61";
 
-    // Background
+    const CREAM = "#F7F2E7";
+    const CREAM2 = "#FCF9F1";
+
+    const GOLD = "#B88A2A";
+    const GOLD2 = "#D7B866";
+    const GOLD3 = "#E8D39A";
+
+    const WHITE = "#FFFFFF";
+    const TEXT = "#263342";
+    const MUTED = "#697384";
+
+    // =========================
+    // BACKGROUND
+    // =========================
     doc.rect(0, 0, W, H).fill(CREAM);
 
-    // Navy outer frame
+    // Soft inner background
+    doc.rect(28, 28, W - 56, H - 56).fill(CREAM2);
+
+    // =========================
+    // LUXURY FRAMES
+    // =========================
     doc
-      .lineWidth(16)
+      .lineWidth(15)
       .strokeColor(NAVY)
-      .rect(18, 18, W - 36, H - 36)
+      .rect(15, 15, W - 30, H - 30)
       .stroke();
 
-    // Gold inner frame
     doc
-      .lineWidth(2)
+      .lineWidth(2.2)
       .strokeColor(GOLD)
-      .rect(35, 35, W - 70, H - 70)
+      .rect(34, 34, W - 68, H - 68)
       .stroke();
 
-    // Second subtle frame
     doc
       .lineWidth(0.8)
-      .strokeColor(GOLD2)
-      .rect(43, 43, W - 86, H - 86)
+      .strokeColor(GOLD3)
+      .rect(42, 42, W - 84, H - 84)
       .stroke();
 
-    // Decorative corner blocks
-    const corner = (x, y, flipX = 1, flipY = 1) => {
+    // =========================
+    // DECORATIVE CORNERS
+    // =========================
+    const drawCorner = (x, y, sx, sy) => {
       doc.save();
       doc.translate(x, y);
-      doc.scale(flipX, flipY);
+      doc.scale(sx, sy);
 
       doc
-        .lineWidth(2)
+        .lineWidth(2.2)
         .strokeColor(GOLD)
-        .moveTo(0, 35)
+        .moveTo(0, 38)
         .lineTo(0, 0)
-        .lineTo(35, 0)
+        .lineTo(38, 0)
         .stroke();
 
       doc
-        .lineWidth(1)
+        .lineWidth(0.9)
         .strokeColor(GOLD2)
-        .moveTo(8, 27)
+        .moveTo(8, 29)
         .lineTo(8, 8)
-        .lineTo(27, 8)
+        .lineTo(29, 8)
         .stroke();
 
       doc.restore();
     };
 
-    corner(52, 52);
-    corner(W - 52, 52, -1, 1);
-    corner(52, H - 52, 1, -1);
-    corner(W - 52, H - 52, -1, -1);
+    drawCorner(50, 50, 1, 1);
+    drawCorner(W - 50, 50, -1, 1);
+    drawCorner(50, H - 50, 1, -1);
+    drawCorner(W - 50, H - 50, -1, -1);
 
-    // Top brand
+    // =========================
+    // TOP BRAND
+    // =========================
     doc
       .font("Helvetica-Bold")
-      .fontSize(13)
+      .fontSize(16)
       .fillColor(GOLD)
-      .text("IQNOVA", 0, 70, {
+      .text("IQNOVA", 0, 67, {
         width: W,
         align: "center",
-        characterSpacing: 3,
+        characterSpacing: 4,
+        lineBreak: false,
       });
 
     doc
       .font("Helvetica")
-      .fontSize(8)
+      .fontSize(7.5)
       .fillColor(NAVY2)
       .text("IQ CHALLENGE", 0, 88, {
         width: W,
         align: "center",
-        characterSpacing: 2,
+        characterSpacing: 3,
+        lineBreak: false,
       });
 
-    // Main title
+    // =========================
+    // TITLE
+    // =========================
     doc
       .font("Helvetica-Bold")
-      .fontSize(30)
+      .fontSize(29)
       .fillColor(NAVY)
-      .text("CERTIFICATE OF ACHIEVEMENT", 0, 120, {
+      .text("CERTIFICATE OF ACHIEVEMENT", 0, 119, {
         width: W,
         align: "center",
+        lineBreak: false,
       });
 
     // Gold divider
     doc
       .lineWidth(1.5)
       .strokeColor(GOLD)
-      .moveTo(W / 2 - 125, 160)
-      .lineTo(W / 2 + 125, 160)
+      .moveTo(W / 2 - 105, 158)
+      .lineTo(W / 2 + 105, 158)
       .stroke();
 
-    // Small subtitle
+    // Small diamond
+    doc
+      .circle(W / 2, 158, 3)
+      .fill(GOLD);
+
+    // =========================
+    // PRESENTED TO
+    // =========================
     doc
       .font("Helvetica")
-      .fontSize(10)
+      .fontSize(9.5)
       .fillColor(MUTED)
-      .text("This certificate is proudly presented to", 0, 178, {
+      .text("THIS CERTIFICATE IS PROUDLY PRESENTED TO", 0, 177, {
         width: W,
         align: "center",
+        characterSpacing: 1.2,
+        lineBreak: false,
       });
 
-    // Student name
+    // =========================
+    // STUDENT NAME
+    // =========================
+    const studentName = String(name || "Participant").trim();
+
+    // Keep long names inside safe area
+    let nameSize = 28;
+
+    if (studentName.length > 26) nameSize = 24;
+    if (studentName.length > 34) nameSize = 20;
+
     doc
       .font("Helvetica-Bold")
-      .fontSize(27)
+      .fontSize(nameSize)
       .fillColor(NAVY)
-      .text(name || "Participant", 70, 205, {
+      .text(studentName, 70, 201, {
         width: W - 140,
+        height: 38,
         align: "center",
+        lineBreak: false,
+        ellipsis: true,
       });
 
     // Name underline
     doc
       .lineWidth(1)
       .strokeColor(GOLD2)
-      .moveTo(W / 2 - 150, 242)
-      .lineTo(W / 2 + 150, 242)
+      .moveTo(W / 2 - 135, 244)
+      .lineTo(W / 2 + 135, 244)
       .stroke();
 
-    // Achievement statement
+    // =========================
+    // ACHIEVEMENT TEXT
+    // =========================
     doc
       .font("Helvetica")
-      .fontSize(10)
+      .fontSize(9.5)
       .fillColor(MUTED)
       .text(
         "for successfully completing the IQNova educational IQ Challenge",
@@ -462,63 +514,104 @@ function createCertificatePdf({
         {
           width: W,
           align: "center",
+          lineBreak: false,
         }
       );
 
-    // Score cards
-    const cardY = 295;
-    const cardW = 145;
-    const cardH = 70;
+    // =========================
+    // PREMIUM RESULT CARDS
+    // =========================
+    const cardY = 294;
+    const cardW = 150;
+    const cardH = 76;
     const gap = 18;
+
     const totalW = cardW * 3 + gap * 2;
     const startX = (W - totalW) / 2;
 
-    const drawCard = (x, title, value) => {
-      // shadow
+    const drawLuxuryCard = (x, label, value, valueSize = 18) => {
+      // Shadow
       doc
-        .roundedRect(x + 3, cardY + 3, cardW, cardH, 8)
-        .fill("#DDD7C9");
+        .roundedRect(x + 3, cardY + 4, cardW, cardH, 9)
+        .fill("#D9D2C2");
 
-      // card
+      // Main card
       doc
-        .roundedRect(x, cardY, cardW, cardH, 8)
+        .roundedRect(x, cardY, cardW, cardH, 9)
         .fill(WHITE);
 
+      // Gold border
       doc
-        .lineWidth(1)
+        .lineWidth(1.1)
         .strokeColor(GOLD2)
-        .roundedRect(x, cardY, cardW, cardH, 8)
+        .roundedRect(x, cardY, cardW, cardH, 9)
         .stroke();
 
+      // Small gold top line
+      doc
+        .lineWidth(2)
+        .strokeColor(GOLD)
+        .moveTo(x + 42, cardY + 1)
+        .lineTo(x + cardW - 42, cardY + 1)
+        .stroke();
+
+      // Label
       doc
         .font("Helvetica-Bold")
-        .fontSize(8)
+        .fontSize(7.5)
         .fillColor(MUTED)
-        .text(title.toUpperCase(), x, cardY + 13, {
-          width: cardW,
+        .text(String(label).toUpperCase(), x + 8, cardY + 14, {
+          width: cardW - 16,
+          height: 12,
           align: "center",
-          characterSpacing: 1,
+          characterSpacing: 1.1,
+          lineBreak: false,
         });
 
+      // Value
       doc
         .font("Helvetica-Bold")
-        .fontSize(19)
+        .fontSize(valueSize)
         .fillColor(NAVY)
-        .text(String(value), x + 5, cardY + 34, {
-          width: cardW - 10,
+        .text(String(value || "—"), x + 8, cardY + 35, {
+          width: cardW - 16,
+          height: 27,
           align: "center",
+          lineBreak: false,
+          ellipsis: true,
         });
     };
 
-    drawCard(startX, "Challenge Score", `${score}/100`);
-    drawCard(startX + cardW + gap, "Performance", performance || "—");
-    drawCard(
-      startX + (cardW + gap) * 2,
-      "Certificate ID",
-      certificateId || "—"
+    drawLuxuryCard(
+      startX,
+      "Challenge Score",
+      `${Number(score) || 0}/100`,
+      19
     );
 
-    // Completion date
+    // Shortened performance display so it NEVER breaks the card
+    const performanceDisplay =
+      performance === "Very Slow / Beginner"
+        ? "Beginner"
+        : String(performance || "—");
+
+    drawLuxuryCard(
+      startX + cardW + gap,
+      "Performance",
+      performanceDisplay,
+      performanceDisplay.length > 10 ? 14 : 17
+    );
+
+    drawLuxuryCard(
+      startX + (cardW + gap) * 2,
+      "Certificate ID",
+      certificateId || "—",
+      12
+    );
+
+    // =========================
+    // COMPLETION DATE
+    // =========================
     const dateText = completedAt
       ? new Date(completedAt).toLocaleDateString("en-IN", {
           day: "2-digit",
@@ -533,49 +626,71 @@ function createCertificatePdf({
 
     doc
       .font("Helvetica")
-      .fontSize(9)
+      .fontSize(8.5)
       .fillColor(MUTED)
-      .text(`Completed on ${dateText}`, 0, 385, {
+      .text(`Completed on ${dateText}`, 0, 391, {
         width: W,
         align: "center",
+        lineBreak: false,
       });
 
-    // Seal
-    const sealX = W - 105;
-    const sealY = H - 115;
+    // =========================
+    // PREMIUM SEAL
+    // =========================
+    const sealX = W - 106;
+    const sealY = H - 111;
 
+    // Outer shadow
     doc
-      .circle(sealX, sealY, 34)
+      .circle(sealX + 2, sealY + 2, 37)
+      .fill("#D7D0C1");
+
+    // Navy seal
+    doc
+      .circle(sealX, sealY, 36)
       .fill(NAVY);
 
+    // Gold ring
     doc
       .lineWidth(2)
+      .strokeColor(GOLD2)
+      .circle(sealX, sealY, 30)
+      .stroke();
+
+    // Inner ring
+    doc
+      .lineWidth(0.7)
       .strokeColor(GOLD)
-      .circle(sealX, sealY, 29)
+      .circle(sealX, sealY, 25)
       .stroke();
 
     doc
       .font("Helvetica-Bold")
-      .fontSize(8)
-      .fillColor(GOLD2)
-      .text("IQNOVA", sealX - 25, sealY - 7, {
+      .fontSize(7.5)
+      .fillColor(GOLD3)
+      .text("IQNOVA", sealX - 25, sealY - 8, {
         width: 50,
         align: "center",
+        characterSpacing: 1,
+        lineBreak: false,
       });
 
     doc
       .font("Helvetica")
-      .fontSize(5.5)
+      .fontSize(5.2)
       .fillColor(WHITE)
-      .text("ACHIEVEMENT", sealX - 27, sealY + 4, {
-        width: 54,
+      .text("ACHIEVEMENT", sealX - 28, sealY + 4, {
+        width: 56,
         align: "center",
+        lineBreak: false,
       });
 
-    // Verification line
+    // =========================
+    // VERIFICATION
+    // =========================
     doc
       .font("Helvetica")
-      .fontSize(7.5)
+      .fontSize(7.2)
       .fillColor(MUTED)
       .text(
         "Certificate verification available through the IQNova certificate portal",
@@ -584,32 +699,40 @@ function createCertificatePdf({
         {
           width: W - 110,
           align: "center",
+          lineBreak: false,
         }
       );
 
-    // Disclaimer
+    // =========================
+    // DISCLAIMER
+    // =========================
     doc
       .font("Helvetica")
-      .fontSize(6.5)
+      .fontSize(6.3)
       .fillColor("#777777")
       .text(
         "This certificate represents performance in the IQNova educational challenge and is not a clinically validated IQ assessment.",
         55,
-        H - 67,
+        H - 68,
         {
           width: W - 110,
+          height: 10,
           align: "center",
+          lineBreak: false,
         }
       );
 
-    // Tiny gold bottom accent
+    // =========================
+    // BOTTOM GOLD ACCENT
+    // =========================
     doc
       .lineWidth(2)
       .strokeColor(GOLD)
-      .moveTo(W / 2 - 65, H - 49)
-      .lineTo(W / 2 + 65, H - 49)
+      .moveTo(W / 2 - 55, H - 49)
+      .lineTo(W / 2 + 55, H - 49)
       .stroke();
 
+    // Finalize
     doc.end();
   });
 }
