@@ -145,7 +145,7 @@ async function getSession(sessionId) {
 }
 
 async function createOrGetPaymentLink(session) {
-  // DB mein payment link already saved hai
+  // 1. Supabase mein link already saved hai
   if (session.payment_link_id && session.payment_link_url) {
     return {
       id: session.payment_link_id,
@@ -154,17 +154,17 @@ async function createOrGetPaymentLink(session) {
     };
   }
 
-  // Razorpay existing link find karo
+  // 2. Razorpay se existing link find karo
   async function findExistingPaymentLink() {
     try {
-      const existing = await razorpay.paymentLink.all({
+      const result = await razorpay.paymentLink.all({
         reference_id: session.session_id,
-        count: 10,
+        count: 100,
       });
 
       const links =
-        existing?.items ||
-        existing?.payment_links ||
+        result?.items ||
+        result?.payment_links ||
         [];
 
       const existingLink = links.find(
@@ -176,7 +176,7 @@ async function createOrGetPaymentLink(session) {
       }
     } catch (error) {
       console.warn(
-        "Could not search existing payment link:",
+        "Razorpay reference search failed:",
         error?.message || error
       );
     }
@@ -184,7 +184,7 @@ async function createOrGetPaymentLink(session) {
     return null;
   }
 
-  // Pehle existing link check
+  // 3. Create karne se pehle existing link check
   const existingLink = await findExistingPaymentLink();
 
   if (existingLink) {
@@ -199,7 +199,7 @@ async function createOrGetPaymentLink(session) {
     return existingLink;
   }
 
-  // Existing nahi mila to create karo
+  // 4. Existing link nahi mila to naya banao
   try {
     const link = await razorpay.paymentLink.create({
       amount: AMOUNT_PAISE,
@@ -243,13 +243,14 @@ async function createOrGetPaymentLink(session) {
 
     return link;
   } catch (error) {
-    // Agar reference_id already exists hai,
-    // existing link recover karke use karo
+    // 5. Agar Razorpay bole reference_id already exists,
+    // existing link ko recover karke use karo
     const description = String(error?.description || "").toLowerCase();
 
     if (
       error?.code === "BAD_REQUEST_ERROR" &&
-      description.includes("reference_id")
+      description.includes("reference_id") &&
+      description.includes("already")
     ) {
       const recoveredLink = await findExistingPaymentLink();
 
