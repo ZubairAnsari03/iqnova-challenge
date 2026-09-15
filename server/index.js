@@ -17,12 +17,16 @@ const AMOUNT_PAISE = 1900;
 const CURRENCY = "INR";
 
 const ANSWERS = [
-  1, 2, 1, 2, 2,
-  2, 1, 3, 0, 1,
-  2, 2, 0, 2, 1,
-  2, 1, 1, 2
+  1, 3, 1, 1, 1,
+  1, 1, 2, 2, 2,
+  0, 1, 1
 ];
-const WEIGHTS = [2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 10, 10, 10, 10];
+const WEIGHTS = [
+  4, 4, 4,
+  7, 7, 7, 7,
+  9, 9, 9,
+  11, 11, 11
+];
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -102,13 +106,13 @@ function buildReview(answers) {
       points: selected === correctAnswer ? WEIGHTS[index] : 0,
       maxPoints: WEIGHTS[index],
       difficulty:
-        index < 5
-          ? "Easy"
-          : index < 10
-            ? "Hard"
-            : index < 15
-              ? "Very Hard"
-              : "Extreme",
+  index < 3
+    ? "Easy"
+    : index < 7
+      ? "Hard"
+      : index < 10
+        ? "Very Hard"
+        : "Extreme",
     };
   });
 }

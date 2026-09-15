@@ -7,178 +7,130 @@ const API = "https://iqnova-challenge.onrender.com";
 const questions = [
   {
     difficulty: "Easy",
-    en: "What comes next? 2, 4, 6, 8, ?",
-    hi: "अगला अंक कौन सा होगा? 2, 4, 6, 8, ?",
-    hinglish: "Agla number kaunsa hoga? 2, 4, 6, 8, ?",
-    options: ["9", "10", "11", "12"],
+    en: "What comes next? 🔵 ⭐ → 🔵 ⭐⭐ → 🔵 ⭐⭐⭐ → ?",
+    hi: "अगला पैटर्न कौन सा होगा? 🔵 ⭐ → 🔵 ⭐⭐ → 🔵 ⭐⭐⭐ → ?",
+    hinglish: "Agla pattern kaunsa hoga? 🔵 ⭐ → 🔵 ⭐⭐ → 🔵 ⭐⭐⭐ → ?",
+    options: ["🔴 ⭐⭐⭐⭐", "🔵 ⭐⭐⭐⭐", "🔵 ⭐⭐", "⭐⭐⭐⭐"],
     answer: 1,
   },
   {
     difficulty: "Easy",
-    en: "Which one is different? Apple, Mango, Carrot, Banana",
-    hi: "इनमें से अलग कौन सा है? सेब, आम, गाजर, केला",
-    hinglish: "Inmein se alag kaunsa hai? Apple, Mango, Carrot, Banana",
-    options: ["Apple", "Mango", "Carrot", "Banana"],
-    answer: 2,
-  },
-  {
-    difficulty: "Easy",
-    en: "A box has 5 red balls and 5 blue balls. How many balls are there in total?",
-    hi: "एक डिब्बे में 5 लाल और 5 नीली गेंदें हैं। कुल कितनी गेंदें हैं?",
-    hinglish: "Ek box mein 5 red aur 5 blue balls hain. Total kitni balls hain?",
-    options: ["8", "9", "10", "12"],
-    answer: 2,
-  },
-  {
-    difficulty: "Easy",
-    en: "If today is Monday, what day will it be after 3 days?",
-    hi: "अगर आज सोमवार है, तो 3 दिन बाद कौन सा दिन होगा?",
-    hinglish: "Agar aaj Monday hai, to 3 din baad kaunsa day hoga?",
-    options: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-    answer: 2,
-  },
-  {
-    difficulty: "Easy",
-    en: "Which number is missing? 5, 10, 15, 20, ?",
-    hi: "खाली स्थान पर कौन सा अंक आएगा? 5, 10, 15, 20, ?",
-    hinglish: "Missing number kaunsa hoga? 5, 10, 15, 20, ?",
-    options: ["22", "24", "25", "30"],
-    answer: 2,
-  },
-
-  {
-    difficulty: "Hard",
-    en: "What comes next? 1, 4, 9, 16, ?",
-    hi: "अगला अंक कौन सा होगा? 1, 4, 9, 16, ?",
-    hinglish: "Agla number kaunsa hoga? 1, 4, 9, 16, ?",
-    options: ["20", "24", "25", "36"],
-    answer: 2,
-  },
-  {
-    difficulty: "Hard",
-    en: "Book is to Reading as Fork is to ____.",
-    hi: "पुस्तक का संबंध पढ़ने से है, उसी तरह कांटे का संबंध किससे है?",
-    hinglish: "Book ka relation Reading se hai, waise Fork ka relation kis se hai?",
-    options: ["Writing", "Eating", "Sleeping", "Running"],
-    answer: 1,
-  },
-  {
-    difficulty: "Hard",
-    en: "Which number does NOT belong? 3, 6, 9, 12, 14",
-    hi: "कौन सा अंक इस क्रम में फिट नहीं बैठता? 3, 6, 9, 12, 14",
-    hinglish: "Kaunsa number is pattern mein fit nahi hota? 3, 6, 9, 12, 14",
-    options: ["6", "9", "12", "14"],
+    en: "Which one is different from the others?",
+    hi: "इनमें से बाकी से अलग कौन सा है?",
+    hinglish: "Inmein se baaki sabse different kaunsa hai?",
+    options: ["▲", "▲", "▲", "▼"],
     answer: 3,
   },
   {
+    difficulty: "Easy",
+    en: "CAT : KITTEN :: DOG : ?",
+    hi: "CAT : KITTEN :: DOG : ?",
+    hinglish: "CAT ka relation KITTEN se hai, waise DOG ka relation kis se hai?",
+    options: ["Cub", "Puppy", "Calf", "Foal"],
+    answer: 1,
+  },
+
+  {
     difficulty: "Hard",
-    en: "If 3 cats catch 3 mice in 3 minutes, how many mice can 1 cat catch in 3 minutes?",
-    hi: "यदि 3 बिल्लियाँ 3 मिनट में 3 चूहे पकड़ती हैं, तो 1 बिल्ली 3 मिनट में कितने चूहे पकड़ेगी?",
-    hinglish: "Agar 3 cats 3 minutes mein 3 mice pakadti hain, to 1 cat 3 minutes mein kitni mice pakdegi?",
-    options: ["1", "2", "3", "6"],
-    answer: 0,
+    en: "You overtake the runner in 2nd position. What is your position?",
+    hi: "आपने दूसरे स्थान वाले धावक को पीछे छोड़ दिया। अब आपकी स्थिति क्या है?",
+    hinglish: "Tum 2nd position wale runner ko overtake karte ho. Ab tumhari position kya hai?",
+    options: ["1st", "2nd", "3rd", "Last"],
+    answer: 1,
   },
   {
     difficulty: "Hard",
-    en: "What comes next? A, C, E, G, ?",
-    hi: "अगला अक्षर कौन सा होगा? A, C, E, G, ?",
-    hinglish: "Agla letter kaunsa hoga? A, C, E, G, ?",
-    options: ["H", "I", "J", "K"],
+    en: "A clock shows 3:15. What is the smaller angle between the hands?",
+    hi: "घड़ी में 3:15 बज रहे हैं। दोनों सुइयों के बीच छोटा कोण कितना है?",
+    hinglish: "Clock mein 3:15 baj rahe hain. Hands ke beech smaller angle kitna hai?",
+    options: ["0°", "7.5°", "15°", "22.5°"],
+    answer: 1,
+  },
+  {
+    difficulty: "Hard",
+    en: "What comes next? AZ → BY → CX → DW → ?",
+    hi: "अगला जोड़ा कौन सा होगा? AZ → BY → CX → DW → ?",
+    hinglish: "Agla pair kaunsa hoga? AZ → BY → CX → DW → ?",
+    options: ["EU", "EV", "FU", "EX"],
+    answer: 1,
+  },
+  {
+    difficulty: "Hard",
+    en: "A father is 4 times as old as his son. In 20 years, he will be twice his son's age. How old is the son now?",
+    hi: "पिता की उम्र बेटे की उम्र की 4 गुना है। 20 साल बाद पिता बेटे की उम्र के 2 गुना होंगे। बेटे की वर्तमान उम्र क्या है?",
+    hinglish: "Father ki age son ki age se 4 times hai. 20 years baad father son ki age se 2 times honge. Son ki current age kya hai?",
+    options: ["8", "10", "12", "15"],
     answer: 1,
   },
 
   {
     difficulty: "Very Hard",
-    en: "What comes next? 2, 6, 12, 20, ?",
-    hi: "अगला अंक कौन सा होगा? 2, 6, 12, 20, ?",
-    hinglish: "Agla number kaunsa hoga? 2, 6, 12, 20, ?",
-    options: ["28", "30", "32", "36"],
-    answer: 1,
-  },
-  {
-    difficulty: "Very Hard",
-    en: "A clock shows 3:00. What is the angle between the hands?",
-    hi: "घड़ी में 3:00 बज रहे हैं। दोनों सुइयों के बीच कितना कोण होगा?",
-    hinglish: "Clock mein 3:00 baj rahe hain. Dono hands ke beech kitna angle hoga?",
-    options: ["45°", "60°", "90°", "120°"],
+    en: "What comes next? 3, 8, 18, 38, 78, ?",
+    hi: "अगला अंक कौन सा होगा? 3, 8, 18, 38, 78, ?",
+    hinglish: "Agla number kaunsa hoga? 3, 8, 18, 38, 78, ?",
+    options: ["148", "156", "158", "160"],
     answer: 2,
   },
   {
     difficulty: "Very Hard",
-    en: "If all BLOPS are ZIPS, which statement must be true?",
-    hi: "यदि सभी BLOPS, ZIPS हैं, तो इनमें से कौन सा कथन निश्चित रूप से सही है?",
-    hinglish: "Agar saare BLOPS, ZIPS hain, to kaunsi baat definitely true hai?",
+    en: "Three switches control three bulbs in another room. You can enter the bulb room only once. How can you identify all three switches?",
+    hi: "तीन स्विच दूसरे कमरे के तीन बल्ब नियंत्रित करते हैं। आप बल्ब वाले कमरे में केवल एक बार जा सकते हैं। तीनों स्विच कैसे पहचानेंगे?",
+    hinglish: "3 switches doosre room ke 3 bulbs control karte hain. Bulb room mein sirf ek baar ja sakte ho. Teeno switches kaise identify karoge?",
     options: [
-      "All BLOPS are ZIPS",
-      "All ZIPS are BLOPS",
-      "All BLOPS are RED",
-      "No BLOPS are ZIPS",
+      "Only look at the switches",
+      "Turn one switch ON and enter immediately",
+      "Turn one bulb ON, wait, turn it OFF, turn second ON, then enter",
+      "It is impossible",
     ],
-    answer: 0,
-  },
-  {
-    difficulty: "Very Hard",
-    en: "What comes next? 4, 7, 13, 25, ?",
-    hi: "अगला अंक कौन सा होगा? 4, 7, 13, 25, ?",
-    hinglish: "Agla number kaunsa hoga? 4, 7, 13, 25, ?",
-    options: ["37", "45", "49", "51"],
     answer: 2,
   },
   {
     difficulty: "Very Hard",
-    en: "A person walks 5 km north and then 5 km east. Which direction is he from the starting point?",
-    hi: "एक व्यक्ति 5 किमी उत्तर और फिर 5 किमी पूर्व जाता है। वह शुरुआती स्थान से किस दिशा में है?",
-    hinglish: "Ek person 5 km north aur phir 5 km east jata hai. Starting point se woh kis direction mein hai?",
-    options: ["North-West", "North-East", "South-East", "South-West"],
-    answer: 1,
+    en: "Three boxes are labelled APPLES, ORANGES and MIXED. Every label is wrong. Which box should you pick one fruit from to identify all three boxes?",
+    hi: "तीन डिब्बों पर APPLES, ORANGES और MIXED लिखा है। हर लेबल गलत है। सभी डिब्बों की पहचान करने के लिए किस डिब्बे से एक फल निकालेंगे?",
+    hinglish: "3 boxes par APPLES, ORANGES aur MIXED labels hain, lekin teeno labels wrong hain. Sab identify karne ke liye kis box se fruit nikaloge?",
+    options: ["APPLES", "ORANGES", "MIXED", "Any box"],
+    answer: 2,
   },
 
   {
     difficulty: "Extreme",
-    en: "What comes next? 3, 5, 9, 17, 33, ?",
-    hi: "अगला अंक कौन सा होगा? 3, 5, 9, 17, 33, ?",
-    hinglish: "Agla number kaunsa hoga? 3, 5, 9, 17, 33, ?",
-    options: ["49", "57", "65", "67"],
-    answer: 2,
+    en: "What comes next? ⬆️ → ➡️ → ⬇️ → ⬅️ → ?",
+    hi: "अगला तीर किस दिशा में होगा? ⬆️ → ➡️ → ⬇️ → ⬅️ → ?",
+    hinglish: "Agla arrow kis direction mein hoga? ⬆️ → ➡️ → ⬇️ → ⬅️ → ?",
+    options: ["⬆️", "➡️", "⬇️", "↗️"],
+    answer: 0,
   },
   {
     difficulty: "Extreme",
-    en: "If A=1, B=2, C=3... what is the value of CAB?",
-    hi: "यदि A=1, B=2, C=3... तो CAB का मान कितना होगा?",
-    hinglish: "A=1, B=2, C=3... to CAB ki total value kya hogi?",
-    options: ["5", "6", "7", "8"],
+    en: "A farmer must cross a river with a wolf, a goat and a cabbage. He can carry only one at a time. What should he take first?",
+    hi: "एक किसान को भेड़िया, बकरी और पत्तागोभी के साथ नदी पार करनी है। वह एक बार में केवल एक चीज ले जा सकता है। उसे सबसे पहले क्या ले जाना चाहिए?",
+    hinglish: "Farmer ko wolf, goat aur cabbage ke saath river cross karni hai. Ek baar mein sirf ek cheez le ja sakta hai. Sabse pehle kya le jayega?",
+    options: ["Wolf", "Goat", "Cabbage", "Wolf + Goat"],
     answer: 1,
   },
   {
     difficulty: "Extreme",
-    en: "A pattern follows: 1 → 3, 2 → 6, 3 → 11, 4 → 18. Then 5 → ?",
-    hi: "एक पैटर्न है: 1 → 3, 2 → 6, 3 → 11, 4 → 18। तो 5 → ?",
-    hinglish: "Pattern dekho: 1 → 3, 2 → 6, 3 → 11, 4 → 18. To 5 → ?",
-    options: ["25", "27", "29", "31"],
+    en: "You have 9 identical-looking balls. One is heavier. What is the minimum number of balance-scale weighings needed to definitely find it?",
+    hi: "आपके पास 9 एक जैसी दिखने वाली गेंदें हैं। उनमें से एक भारी है। उसे निश्चित रूप से खोजने के लिए कम से कम कितनी बार तराजू से तौलना होगा?",
+    hinglish: "9 same-looking balls hain. Ek ball heavy hai. Use definitely find karne ke liye minimum kitni weighings chahiye?",
+    options: ["1", "2", "3", "4"],
     answer: 1,
-  },
-  {
-    difficulty: "Extreme",
-    en: "Which number completes the pattern? 2, 3, 5, 9, 17, ?",
-    hi: "कौन सा अंक इस पैटर्न को पूरा करेगा? 2, 3, 5, 9, 17, ?",
-    hinglish: "Kaunsa number pattern complete karega? 2, 3, 5, 9, 17, ?",
-    options: ["25", "31", "33", "35"],
-    answer: 2,
   },
 ];
 
 const translations = {
   english: {
     how: "How It Works", why: "Why IQNova", verify: "Certificate Verify", start: "Start Challenge",
-    badge: "19-Question Intelligence Challenge", title: "Challenge the way you think.",
+    badge: "13-Question Intelligence Challenge", title: "Challenge the way you think.",
     desc: "Test your logical reasoning, pattern recognition, numerical thinking and problem-solving skills with the IQNova Challenge.",
-    learn: "Learn More", noLogin: "No login required", questions: "19 questions", unlock: "One-time ₹19 unlock",
+    learn: "Learn More", noLogin: "No login required", questions: "13 questions", unlock: "One-time ₹13 unlock",
     experience: "THE IQNOVA EXPERIENCE", built: "Built to challenge your thinking.",
     warmup: "From easy warm-ups to extreme reasoning puzzles.", levels: "4 Difficulty Levels",
     levelsDesc: "Easy, Hard, Very Hard and Extreme.", report: "Instant Report",
     reportDesc: "Unlock your score, analysis and certificate.", certificate: "CERTIFICATE",
     verifyTitle: "Verify an IQNova certificate.", verifyDesc: "Check a certificate using its unique Certificate ID.",
-    verifyBtn: "Verify Certificate", before: "Before we begin.", details: "Enter your details to start the 19-question challenge.",
+    verifyBtn: "Verify Certificate", before: "Before we begin.", details: "Enter your details to start the 13-question challenge.",
     name: "Full Name", age: "Age", email: "Email", begin: "Start the Test", back: "Back",
     question: "Question", next: "Next Question", finish: "Complete Challenge", complete: "CHALLENGE COMPLETE",
     resultReady: "Your result is ready.", fullUnlock: "One-time full result unlock", unlockResult: "Unlock Full Result",
@@ -191,15 +143,15 @@ const translations = {
   },
   hindi: {
     how: "यह कैसे काम करता है", why: "IQNova क्यों", verify: "सर्टिफिकेट सत्यापित करें", start: "चैलेंज शुरू करें",
-    badge: "19 प्रश्नों की बुद्धिमत्ता चुनौती", title: "अपनी सोच को चुनौती दें।",
+    badge: "13 प्रश्नों की बुद्धिमत्ता चुनौती", title: "अपनी सोच को चुनौती दें।",
     desc: "IQNova Challenge के साथ अपनी तार्किक सोच, पैटर्न पहचान, संख्यात्मक सोच और समस्या-समाधान कौशल को परखें।",
-    learn: "और जानें", noLogin: "लॉगिन की जरूरत नहीं", questions: "19 प्रश्न", unlock: "एक बार ₹19 में अनलॉक",
+    learn: "और जानें", noLogin: "लॉगिन की जरूरत नहीं", questions: "13 प्रश्न", unlock: "एक बार ₹13 में अनलॉक",
     experience: "IQNOVA का अनुभव", built: "आपकी सोच को चुनौती देने के लिए बनाया गया।",
     warmup: "आसान शुरुआत से लेकर कठिन तर्क पहेलियों तक।", levels: "4 कठिनाई स्तर",
     levelsDesc: "आसान, कठिन, बहुत कठिन और अत्यंत कठिन।", report: "तुरंत रिपोर्ट",
     reportDesc: "अपना स्कोर, विश्लेषण और सर्टिफिकेट अनलॉक करें।", certificate: "सर्टिफिकेट",
     verifyTitle: "IQNova सर्टिफिकेट सत्यापित करें।", verifyDesc: "अपने यूनिक Certificate ID से सर्टिफिकेट चेक करें.",
-    verifyBtn: "सर्टिफिकेट सत्यापित करें", before: "शुरू करने से पहले।", details: "19 प्रश्नों की चुनौती शुरू करने के लिए अपनी जानकारी भरें।",
+    verifyBtn: "सर्टिफिकेट सत्यापित करें", before: "शुरू करने से पहले।", details: "13 प्रश्नों की चुनौती शुरू करने के लिए अपनी जानकारी भरें।",
     name: "पूरा नाम", age: "उम्र", email: "ईमेल", begin: "टेस्ट शुरू करें", back: "वापस",
     question: "प्रश्न", next: "अगला प्रश्न", finish: "चैलेंज पूरा करें", complete: "चैलेंज पूरा हुआ",
     resultReady: "आपका परिणाम तैयार है।", fullUnlock: "एक बार में पूरा परिणाम अनलॉक", unlockResult: "पूरा परिणाम अनलॉक करें",
@@ -212,15 +164,15 @@ const translations = {
   },
   hinglish: {
     how: "Kaise Kaam Karta Hai", why: "IQNova Kyun", verify: "Certificate Verify", start: "Challenge Start Karo",
-    badge: "19-Question Intelligence Challenge", title: "Apni thinking ko challenge karo.",
+    badge: "13-Question Intelligence Challenge", title: "Apni thinking ko challenge karo.",
     desc: "IQNova Challenge ke saath apni logical reasoning, pattern recognition, numerical thinking aur problem-solving skills test karo.",
-    learn: "Aur Jaano", noLogin: "Login ki zarurat nahi", questions: "19 questions", unlock: "One-time ₹19 unlock",
+    learn: "Aur Jaano", noLogin: "Login ki zarurat nahi", questions: "13 questions", unlock: "One-time ₹13 unlock",
     experience: "THE IQNOVA EXPERIENCE", built: "Tumhari thinking ko challenge karne ke liye banaya gaya.",
     warmup: "Easy warm-up se lekar extreme reasoning puzzles tak.", levels: "4 Difficulty Levels",
     levelsDesc: "Easy, Hard, Very Hard aur Extreme.", report: "Instant Report",
     reportDesc: "Apna score, analysis aur certificate unlock karo.", certificate: "CERTIFICATE",
     verifyTitle: "IQNova certificate verify karo.", verifyDesc: "Unique Certificate ID se certificate check karo.",
-    verifyBtn: "Certificate Verify Karo", before: "Shuru karne se pehle.", details: "19-question challenge start karne ke liye apni details bharo.",
+    verifyBtn: "Certificate Verify Karo", before: "Shuru karne se pehle.", details: "13-question challenge start karne ke liye apni details bharo.",
     name: "Full Name", age: "Age", email: "Email", begin: "Test Shuru Karo", back: "Back",
     question: "Question", next: "Next Question", finish: "Challenge Complete Karo", complete: "CHALLENGE COMPLETE",
     resultReady: "Tumhara result ready hai.", fullUnlock: "One-time full result unlock", unlockResult: "Full Result Unlock Karo",
@@ -250,11 +202,11 @@ function performanceText(score, language) {
 
 function analysisForResult(result, language) {
   const groups = [
-    { key: "Easy", label: language === "hindi" ? "Easy" : "Easy", max: 10 },
-    { key: "Hard", label: language === "hindi" ? "Hard" : "Hard", max: 20 },
-    { key: "Very Hard", label: language === "hindi" ? "Very Hard" : "Very Hard", max: 30 },
-    { key: "Extreme", label: language === "hindi" ? "Extreme" : "Extreme", max: 40 }
-  ];
+  { key: "Easy", label: "Easy", max: 12 },
+  { key: "Hard", label: "Hard", max: 28 },
+  { key: "Very Hard", label: "Very Hard", max: 27 },
+  { key: "Extreme", label: "Extreme", max: 33 }
+];
 
   return groups.map((group) => {
     const items = result.review.filter((item) => item.difficulty === group.key);
@@ -634,13 +586,13 @@ if (callbackSession) {
               <div className="mini-label">IQNOVA</div>
               <h2>IQ Challenge</h2>
               <div className="score-preview">
-                <div><strong>19</strong><span>{t.questions}</span></div>
+                <div><strong>{questions.length}</strong><span>{t.questions}</span></div>
                 <div><strong>100</strong><span>Max Score</span></div>
               </div>
               <div className="difficulty">
                 <span>Easy</span><span>Hard</span><span>Very Hard</span><span>Extreme</span>
               </div>
-              <div className="card-footer"><span>IQNOVA</span><span>01 — 19</span></div>
+              <div className="card-footer"><span>IQNOVA</span><span>01 — {questions.length}</span></div>
             </div>
           </main>
 
@@ -698,12 +650,12 @@ if (callbackSession) {
       {page === "quiz" && (
         <main className="quiz-page">
           <div className="quiz-top">
-            <span>{t.question} {current + 1} / 19</span>
+            <span>{t.question} {current + 1} / {questions.length}</span>
             <span className={`difficulty-label ${currentQuestion.difficulty.toLowerCase().replace(" ", "-")}`}>{currentQuestion.difficulty}</span>
           </div>
 
           <div className="progress">
-            <div style={{ width: `${((current + 1) / 19) * 100}%` }} />
+            <div style={{ width: `${((current + 1) / questions.length) * 100}%` }} />
           </div>
 
           <div className="question-card">
@@ -733,7 +685,7 @@ if (callbackSession) {
             </div>
 
             <button className="primary-button next-button" disabled={answers[current] === undefined} onClick={nextQuestion}>
-              {current === 18 ? t.finish : t.next}<span>→</span>
+              {current === questions.length - 1 ? t.finish : t.next}<span>→</span>
             </button>
           </div>
         </main>
