@@ -670,45 +670,52 @@ setPage("quiz");
         <div className="question-number">
           {String(current + 1).padStart(2, "0")}
         </div>
-
         <span>{currentQuestion.difficulty}</span>
       </div>
 
       <h1>
-  {currentQuestion?.question?.[language] ||
-    currentQuestion?.question?.en ||
-    ""}
-</h1>
+        {language === "english"
+          ? currentQuestion.question.en
+          : language === "hindi"
+            ? currentQuestion.question.hi
+            : currentQuestion.question.hinglish}
+      </h1>
 
       <div className="options">
-  {(language === "english"
-    ? currentQuestion.options.en
-    : language === "hindi"
-      ? currentQuestion.options.hi
-      : currentQuestion.options.hinglish
-  ).map((option, index) => (
-    <button
-      key={index}
-      className={answers[current] === index ? "option selected" : "option"}
-      onClick={() =>
-        setAnswers((prev) => ({
-          ...prev,
-          [current]: index,
-        }))
-      }
-    >
-      <span>{String.fromCharCode(65 + index)}</span>
-      {option}
-    </button>
-  ))}
-</div>
+        {(language === "english"
+          ? currentQuestion.options.en
+          : language === "hindi"
+            ? currentQuestion.options.hi
+            : currentQuestion.options.hinglish
+        ).map((option, index) => (
+          <button
+            key={index}
+            className={
+              answers[current] === index
+                ? "option selected"
+                : "option"
+            }
+            onClick={() =>
+              setAnswers((prev) => ({
+                ...prev,
+                [current]: index,
+              }))
+            }
+          >
+            <span>{String.fromCharCode(65 + index)}</span>
+            {option}
+          </button>
+        ))}
+      </div>
 
       <button
         className="primary-button next-button"
         disabled={answers[current] === undefined}
         onClick={nextQuestion}
       >
-        {current === quizQuestions.length - 1 ? t.finish : t.next}
+        {current === quizQuestions.length - 1
+          ? t.finish
+          : t.next}
         <span>→</span>
       </button>
     </div>
