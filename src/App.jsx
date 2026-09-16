@@ -648,7 +648,11 @@ setPage("quiz");
         {t.question} {current + 1} / {quizQuestions.length}
       </span>
 
-      <span className={`difficulty-label ${currentQuestion.difficulty.toLowerCase().replace(" ", "-")}`}>
+      <span
+        className={`difficulty-label ${currentQuestion.difficulty
+          .toLowerCase()
+          .replace(" ", "-")}`}
+      >
         {currentQuestion.difficulty}
       </span>
     </div>
@@ -656,7 +660,7 @@ setPage("quiz");
     <div className="progress">
       <div
         style={{
-          width: `${((current + 1) / quizQuestions.length) * 100}%`
+          width: `${((current + 1) / quizQuestions.length) * 100}%`,
         }}
       />
     </div>
@@ -670,17 +674,7 @@ setPage("quiz");
         <span>{currentQuestion.difficulty}</span>
       </div>
 
-      <h1>
-        {language === "english"
-          ? currentQuestion.question.en
-          : language === "hindi"
-            ? currentQuestion.question.hi
-            : currentQuestion.question.hinglish}
-      </h1>
-
-      <button
-        className="primary-button next-button"
-              </h1>
+      <h1>{questionText}</h1>
 
       <div className="options">
         {questionOptions.map((option, index) => (
