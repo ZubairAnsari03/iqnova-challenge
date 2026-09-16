@@ -2611,3 +2611,21 @@ footer p {
   word-break: break-word !important;
   line-height: 1.45 !important;
 }
+
+/* ONLY: Interest dropdown text color fix */
+.interest-dropdown summary,
+.interest-option {
+  color: #071A33 !important;
+}
+
+.interest-option > span:last-child {
+  color: #071A33 !important;
+}
+
+.interest-option.selected {
+  color: #071A33 !important;
+}
+
+.interest-option.selected .interest-check {
+  color: #ffffff !important;
+}
