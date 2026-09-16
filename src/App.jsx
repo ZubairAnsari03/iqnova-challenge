@@ -28,348 +28,691 @@ const INTERESTS = [
 
 const QUESTION_COUNT = 15;
 
+const INTEREST_TRANSLATIONS = {
+  "📚 Education & Study": { english: "📚 Education & Study", hindi: "📚 शिक्षा और अध्ययन", hinglish: "📚 Education & Study" },
+  "📱 Social Media": { english: "📱 Social Media", hindi: "📱 सोशल मीडिया", hinglish: "📱 Social Media" },
+  "🏏 Cricket & Sports": { english: "🏏 Cricket & Sports", hindi: "🏏 क्रिकेट और खेल", hinglish: "🏏 Cricket & Sports" },
+  "🎬 Movies & Entertainment": { english: "🎬 Movies & Entertainment", hindi: "🎬 फ़िल्में और मनोरंजन", hinglish: "🎬 Movies & Entertainment" },
+  "🌍 World & Politics": { english: "🌍 World & Politics", hindi: "🌍 विश्व और राजनीति", hinglish: "🌍 World & Politics" },
+  "❤️ Relationship & Social Situations": { english: "❤️ Relationship & Social Situations", hindi: "❤️ रिश्ते और सामाजिक परिस्थितियाँ", hinglish: "❤️ Relationship & Social Situations" },
+  "🧠 Quiz & General Knowledge": { english: "🧠 Quiz & General Knowledge", hindi: "🧠 क्विज़ और सामान्य ज्ञान", hinglish: "🧠 Quiz & General Knowledge" },
+  "🧩 Puzzle & Mathematics": { english: "🧩 Puzzle & Mathematics", hindi: "🧩 पहेली और गणित", hinglish: "🧩 Puzzle & Mathematics" },
+};
+
 const OPTION_TRANSLATIONS = {
+
   "Pomodoro": {
+
     hindi: "पोमोडोरो",
+
     hinglish: "Pomodoro"
+
   },
+
   "Random Study": {
+
     hindi: "यादृच्छिक अध्ययन",
+
     hinglish: "Random Study"
+
   },
+
   "Speed Reading": {
+
     hindi: "तेज़ पढ़ना",
+
     hinglish: "Fast Reading"
+
   },
+
   "Night Shift": {
+
     hindi: "नाइट शिफ्ट",
+
     hinglish: "Night Shift"
+
   },
 
   "Engagement": {
+
     hindi: "जुड़ाव",
+
     hinglish: "Engagement"
+
   },
+
   "Password": {
+
     hindi: "पासवर्ड",
+
     hinglish: "Password"
+
   },
+
   "Location": {
+
     hindi: "स्थान",
+
     hinglish: "Location"
+
   },
+
   "Username": {
+
     hindi: "उपयोगकर्ता नाम",
+
     hinglish: "Username"
+
   },
+
   "Discovering related content": {
+
     hindi: "संबंधित सामग्री खोजना",
+
     hinglish: "Related content dhoondhna"
+
   },
+
   "Changing password": {
+
     hindi: "पासवर्ड बदलना",
+
     hinglish: "Password change karna"
+
   },
+
   "Calling someone": {
+
     hindi: "किसी को कॉल करना",
+
     hinglish: "Kisi ko call karna"
+
   },
+
   "Editing photos": {
+
     hindi: "फोटो संपादित करना",
+
     hinglish: "Photos edit karna"
+
   },
+
   "Likes, comments and shares": {
+
     hindi: "लाइक, कमेंट और शेयर",
+
     hinglish: "Likes, comments aur shares"
+
   },
+
   "Only followers": {
+
     hindi: "केवल फॉलोअर्स",
+
     hinglish: "Sirf followers"
+
   },
+
   "Only passwords": {
+
     hindi: "केवल पासवर्ड",
+
     hinglish: "Sirf passwords"
+
   },
+
   "Only profile visits": {
+
     hindi: "केवल प्रोफ़ाइल विज़िट",
+
     hinglish: "Sirf profile visits"
+
   },
 
   "A continuation of a story": {
+
     hindi: "कहानी की निरंतरता",
+
     hinglish: "Story ka continuation"
+
   },
+
   "A trailer": {
+
     hindi: "ट्रेलर",
+
     hinglish: "Trailer"
+
   },
+
   "A poster": {
+
     hindi: "पोस्टर",
+
     hinglish: "Poster"
+
   },
+
   "A soundtrack": {
+
     hindi: "साउंडट्रैक",
+
     hinglish: "Soundtrack"
+
   },
+
   "Promoting the movie": {
+
     hindi: "फिल्म का प्रचार करना",
+
     hinglish: "Movie ko promote karna"
+
   },
+
   "Changing the ending": {
+
     hindi: "अंत बदलना",
+
     hinglish: "Ending change karna"
+
   },
+
   "Recording sound": {
+
     hindi: "ध्वनि रिकॉर्ड करना",
+
     hinglish: "Sound record karna"
+
   },
+
   "Selling tickets only": {
+
     hindi: "केवल टिकट बेचना",
+
     hinglish: "Sirf tickets sell karna"
+
   },
 
   "Mumbai": {
+
     hindi: "मुंबई",
+
     hinglish: "Mumbai"
+
   },
+
   "New Delhi": {
+
     hindi: "नई दिल्ली",
+
     hinglish: "New Delhi"
+
   },
+
   "Kolkata": {
+
     hindi: "कोलकाता",
+
     hinglish: "Kolkata"
+
   },
+
   "Chennai": {
+
     hindi: "चेन्नई",
+
     hinglish: "Chennai"
+
   },
+
   "London": {
+
     hindi: "लंदन",
+
     hinglish: "London"
+
   },
+
   "New York City": {
+
     hindi: "न्यूयॉर्क शहर",
+
     hinglish: "New York City"
+
   },
+
   "Paris": {
+
     hindi: "पेरिस",
+
     hinglish: "Paris"
+
   },
+
   "Rome": {
+
     hindi: "रोम",
+
     hinglish: "Rome"
+
   },
+
   "Lok Sabha and Rajya Sabha": {
+
     hindi: "लोकसभा और राज्यसभा",
+
     hinglish: "Lok Sabha aur Rajya Sabha"
+
   },
+
   "Vidhan Sabha and Lok Sabha": {
+
     hindi: "विधानसभा और लोकसभा",
+
     hinglish: "Vidhan Sabha aur Lok Sabha"
+
   },
+
   "Rajya Sabha and Supreme Court": {
+
     hindi: "राज्यसभा और सर्वोच्च न्यायालय",
+
     hinglish: "Rajya Sabha aur Supreme Court"
+
   },
+
   "Lok Sabha and High Court": {
+
     hindi: "लोकसभा और उच्च न्यायालय",
+
     hinglish: "Lok Sabha aur High Court"
+
   },
+
   "Choosing representatives": {
+
     hindi: "प्रतिनिधियों का चुनाव करना",
+
     hinglish: "Representatives ko choose karna"
+
   },
+
   "Printing money": {
+
     hindi: "पैसे छापना",
+
     hinglish: "Paise print karna"
+
   },
+
   "Changing weather": {
+
     hindi: "मौसम बदलना",
+
     hinglish: "Weather change karna"
+
   },
+
   "Making laws automatically": {
+
     hindi: "अपने आप कानून बनाना",
+
     hinglish: "Automatically laws banana"
+
   },
 
   "Paying attention while someone speaks": {
+
     hindi: "किसी के बोलते समय ध्यान से सुनना",
+
     hinglish: "Jab koi bole to dhyan se sunna"
+
   },
+
   "Ignoring someone": {
+
     hindi: "किसी को अनदेखा करना",
+
     hinglish: "Kisi ko ignore karna"
+
   },
+
   "Interrupting often": {
+
     hindi: "बार-बार बीच में रोकना",
+
     hinglish: "Baar-baar interrupt karna"
+
   },
+
   "Changing the topic": {
+
     hindi: "विषय बदलना",
+
     hinglish: "Topic change karna"
+
   },
+
   "Calm discussion": {
+
     hindi: "शांत चर्चा",
+
     hinglish: "Calm discussion"
+
   },
+
   "Shouting": {
+
     hindi: "चिल्लाना",
+
     hinglish: "Chillana"
+
   },
+
   "Insulting": {
+
     hindi: "अपमान करना",
+
     hinglish: "Insult karna"
+
   },
+
   "Ignoring forever": {
+
     hindi: "हमेशा के लिए अनदेखा करना",
+
     hinglish: "Hamesha ke liye ignore karna"
+
   },
+
   "Listening": {
+
     hindi: "ध्यान से सुनना",
+
     hinglish: "Dhyan se sunna"
+
   },
+
   "Mocking": {
+
     hindi: "मज़ाक उड़ाना",
+
     hinglish: "Mazak udana"
+
   },
+
   "Arguing": {
+
     hindi: "बहस करना",
+
     hinglish: "Bahas karna"
+
   },
+
   "Clarify calmly": {
+
     hindi: "शांत होकर स्पष्ट करना",
+
     hinglish: "Calmly clarify karna"
+
   },
+
   "Spread rumors": {
+
     hindi: "अफवाहें फैलाना",
+
     hinglish: "Rumours failana"
+
   },
+
   "Avoid forever": {
+
     hindi: "हमेशा के लिए दूर रहना",
+
     hinglish: "Hamesha ke liye avoid karna"
+
   },
+
   "Blame immediately": {
+
     hindi: "तुरंत दोष देना",
+
     hinglish: "Turant blame karna"
+
   },
+
   "They define personal limits": {
+
     hindi: "वे व्यक्तिगत सीमाएँ तय करती हैं",
+
     hinglish: "Ye personal limits define karti hain"
+
   },
+
   "They create confusion": {
+
     hindi: "वे भ्रम पैदा करती हैं",
+
     hinglish: "Ye confusion create karti hain"
+
   },
+
   "They remove communication": {
+
     hindi: "वे संवाद समाप्त करती हैं",
+
     hinglish: "Ye communication khatam karti hain"
+
   },
+
   "They force agreement": {
+
     hindi: "वे सहमति के लिए मजबूर करती हैं",
+
     hinglish: "Ye agreement ke liye force karti hain"
+
   },
+
   "Communicate the concern": {
+
     hindi: "अपनी चिंता बताना",
+
     hinglish: "Apni concern communicate karna"
+
   },
+
   "Insult them": {
+
     hindi: "उनका अपमान करना",
+
     hinglish: "Unhe insult karna"
+
   },
+
   "Become late intentionally": {
+
     hindi: "जानबूझकर देर करना",
+
     hinglish: "Jaan-bujhkar late hona"
+
   },
+
   "Never explain": {
+
     hindi: "कभी स्पष्ट न करना",
+
     hinglish: "Kabhi explain na karna"
+
   },
+
   "Listen and clarify": {
+
     hindi: "सुनना और स्पष्ट करना",
+
     hinglish: "Sunna aur clarify karna"
+
   },
+
   "Raise voices": {
+
     hindi: "आवाज़ ऊँची करना",
+
     hinglish: "Awaaz unchi karna"
+
   },
+
   "Assume intentions": {
+
     hindi: "इरादे मान लेना",
+
     hinglish: "Intentions assume karna"
+
   },
+
   "Spread the argument": {
+
     hindi: "बहस को फैलाना",
+
     hinglish: "Argument ko spread karna"
+
   },
+
   "It can reveal useful concerns": {
+
     hindi: "यह उपयोगी चिंताओं को सामने ला सकता है",
+
     hinglish: "Ye useful concerns reveal kar sakta hai"
+
   },
+
   "It always wins": {
+
     hindi: "यह हमेशा जीतता है",
+
     hinglish: "Ye hamesha win karta hai"
+
   },
+
   "It avoids all decisions": {
+
     hindi: "यह सभी निर्णयों से बचता है",
+
     hinglish: "Ye saare decisions avoid karta hai"
+
   },
+
   "It removes discussion": {
+
     hindi: "यह चर्चा समाप्त कर देता है",
+
     hinglish: "Ye discussion khatam kar deta hai"
+
   },
+
   "Consider the useful point": {
+
     hindi: "उपयोगी बात पर विचार करना",
+
     hinglish: "Useful point ko consider karna"
+
   },
+
   "Immediately insult back": {
+
     hindi: "तुरंत पलटकर अपमान करना",
+
     hinglish: "Turant wapas insult karna"
+
   },
+
   "Ignore every detail": {
+
     hindi: "हर विवरण को अनदेखा करना",
+
     hinglish: "Har detail ignore karna"
+
   },
+
   "Start an argument": {
+
     hindi: "बहस शुरू करना",
+
     hinglish: "Argument start karna"
+
   },
 
   "Earth": {
+
     hindi: "पृथ्वी",
+
     hinglish: "Earth"
+
   },
+
   "Mars": {
+
     hindi: "मंगल",
+
     hinglish: "Mars"
+
   },
+
   "Jupiter": {
+
     hindi: "बृहस्पति",
+
     hinglish: "Jupiter"
+
   },
+
   "Venus": {
+
     hindi: "शुक्र",
+
     hinglish: "Venus"
+
   },
+
   "Mercury": {
+
     hindi: "बुध",
+
     hinglish: "Mercury"
+
   },
+
   "Oxygen": {
+
     hindi: "ऑक्सीजन",
+
     hinglish: "Oxygen"
+
   },
+
   "Nitrogen": {
+
     hindi: "नाइट्रोजन",
+
     hinglish: "Nitrogen"
+
   },
+
   "Hydrogen": {
+
     hindi: "हाइड्रोजन",
+
     hinglish: "Hydrogen"
+
   },
+
   "Carbon dioxide": {
+
     hindi: "कार्बन डाइऑक्साइड",
+
     hinglish: "Carbon dioxide"
+
   }
+
 };
 
 const translations = {
@@ -570,6 +913,13 @@ function analysisForResult(result, language) {
 
 }
 
+function difficultyText(difficulty, language) {
+  if (language === "hindi") {
+    return { Easy: "आसान", Hard: "कठिन", "Very Hard": "बहुत कठिन", Extreme: "अत्यंत कठिन" }[difficulty] || difficulty;
+  }
+  return difficulty;
+}
+
 function App() {
 
   const [page, setPage] = useState("home");
@@ -606,48 +956,36 @@ const [quizQuestions, setQuizQuestions] = useState([]);
 
   const currentQuestion = quizQuestions[current];
 
-// Backend-safe question text. Supports both object and string formats.
+const languageKey =
+    language === "english" ? "en" : language === "hindi" ? "hi" : "hinglish";
 
   const questionText = (() => {
-
     const raw = currentQuestion?.question;
-
     if (typeof raw === "string") return raw;
-
     if (raw && typeof raw === "object") {
-
-      return raw[language] || raw.hinglish || raw.en || raw.hi || "";
-
+      return raw[languageKey] || raw.hinglish || raw.en || raw.hi || "";
     }
-
     return "";
-
   })();
 
-// Backend-safe options. ALWAYS returns an array, so .map() cannot crash.
-
   const questionOptions = (() => {
-
     const raw = currentQuestion?.options;
 
-    if (Array.isArray(raw)) return raw;
-
-    if (raw && typeof raw === "object") {
-
-      const localized = raw[language];
-
+    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+      const localized = raw[languageKey];
       if (Array.isArray(localized)) return localized;
-
-      if (Array.isArray(raw.hinglish)) return raw.hinglish;
-
-      if (Array.isArray(raw.en)) return raw.en;
-
-      if (Array.isArray(raw.hi)) return raw.hi;
-
     }
 
-    return [];
+    const source = Array.isArray(raw)
+      ? raw
+      : raw && typeof raw === "object" && Array.isArray(raw.en)
+        ? raw.en
+        : [];
 
+    return source.map((option) => {
+      if (language === "english") return option;
+      return OPTION_TRANSLATIONS[option]?.[language] || option;
+    });
   })();
 
   const loadPaidResult = async (sid) => {
@@ -798,7 +1136,7 @@ if (callbackSession) {
 
         language === "hindi"
 
-          ? "Kripya apna naam, age aur email bhariye."
+          ? "कृपया अपना नाम, उम्र और ईमेल भरें।"
 
           : language === "english"
 
@@ -1359,22 +1697,39 @@ setPage("quiz");
           key={interest}
 
           className={`interest-card ${selected ? "selected" : ""}`}
+
 style={{
+
   width: "100%",
+
   minHeight: "58px",
+
   padding: "16px 18px",
+
   borderRadius: "14px",
+
   border: selected ? "2px solid #071A33" : "1px solid #D9DDE5",
+
   background: selected ? "#F3F6FA" : "#FFFFFF",
+
   color: "#071A33",
+
   display: "flex",
+
   alignItems: "center",
+
   gap: "12px",
+
   textAlign: "left",
+
   fontSize: "15px",
+
   fontWeight: selected ? 600 : 500,
+
   cursor: "pointer",
+
   boxSizing: "border-box"
+
 }}
 
           onClick={() => {
@@ -1402,23 +1757,38 @@ style={{
         >
 
           <span
+
   style={{
+
     width: "22px",
+
     height: "22px",
+
     minWidth: "22px",
+
     borderRadius: "50%",
+
     border: selected ? "2px solid #071A33" : "1px solid #B8BEC8",
+
     display: "flex",
+
     alignItems: "center",
+
     justifyContent: "center",
+
     fontSize: "13px",
+
     fontWeight: 700
+
   }}
+
 >
+
   {selected ? "✓" : ""}
+
 </span>
 
-          {interest}
+          {INTEREST_TRANSLATIONS[interest]?.[language] || interest}
 
         </button>
 
@@ -1494,7 +1864,7 @@ style={{
 
       >
 
-        {currentQuestion.difficulty}
+        {difficultyText(currentQuestion.difficulty, language)}
 
       </span>
 
@@ -1524,7 +1894,7 @@ style={{
 
         </div>
 
-        <span>{currentQuestion.difficulty}</span>
+        <span>{difficultyText(currentQuestion.difficulty, language)}</span>
 
       </div>
 
@@ -1563,7 +1933,9 @@ style={{
     </button>
 
   )) : (
+
     <p className="options-error">Options load nahi ho paaye. Please refresh karke try karo.</p>
+
   )}
 
 </div>
