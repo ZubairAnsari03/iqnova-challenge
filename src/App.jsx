@@ -1677,133 +1677,58 @@ setPage("quiz");
             <p>{t.details}</p>
 
             <div className="interest-section">
-
   <h2>{t.interestTitle}</h2>
-
   <p>{t.interestDesc}</p>
 
-  <div className="interest-grid">
+  <details className="interest-dropdown">
+    <summary>
+      <span>
+        {selectedInterests.length === 0
+          ? t.interestTitle
+          : `${selectedInterests.length} / 5 ${t.selected}`}
+      </span>
+      <span className="dropdown-arrow">⌄</span>
+    </summary>
 
-    {INTERESTS.map((interest) => {
+    <div className="interest-options">
+      {INTERESTS.map((interest) => {
+        const selected = selectedInterests.includes(interest);
 
-      const selected = selectedInterests.includes(interest);
+        return (
+          <button
+            type="button"
+            key={interest}
+            className={`interest-option ${selected ? "selected" : ""}`}
+            onClick={() => {
+              setSelectedInterests((prev) => {
+                if (prev.includes(interest)) {
+                  return prev.filter((item) => item !== interest);
+                }
 
-      return (
+                if (prev.length >= 5) {
+                  return prev;
+                }
 
-        <button
+                return [...prev, interest];
+              });
+            }}
+          >
+            <span className="interest-check">
+              {selected ? "✓" : ""}
+            </span>
 
-          type="button"
-
-          key={interest}
-
-          className={`interest-card ${selected ? "selected" : ""}`}
-
-style={{
-
-  width: "100%",
-
-  minHeight: "58px",
-
-  padding: "16px 18px",
-
-  borderRadius: "14px",
-
-  border: selected ? "2px solid #071A33" : "1px solid #D9DDE5",
-
-  background: selected ? "#F3F6FA" : "#FFFFFF",
-
-  color: "#071A33",
-
-  display: "flex",
-
-  alignItems: "center",
-
-  gap: "12px",
-
-  textAlign: "left",
-
-  fontSize: "15px",
-
-  fontWeight: selected ? 600 : 500,
-
-  cursor: "pointer",
-
-  boxSizing: "border-box"
-
-}}
-
-          onClick={() => {
-
-            setSelectedInterests((prev) => {
-
-              if (prev.includes(interest)) {
-
-                return prev.filter((item) => item !== interest);
-
-              }
-
-              if (prev.length >= 5) {
-
-                return prev;
-
-              }
-
-              return [...prev, interest];
-
-            });
-
-          }}
-
-        >
-
-          <span
-
-  style={{
-
-    width: "22px",
-
-    height: "22px",
-
-    minWidth: "22px",
-
-    borderRadius: "50%",
-
-    border: selected ? "2px solid #071A33" : "1px solid #B8BEC8",
-
-    display: "flex",
-
-    alignItems: "center",
-
-    justifyContent: "center",
-
-    fontSize: "13px",
-
-    fontWeight: 700
-
-  }}
-
->
-
-  {selected ? "✓" : ""}
-
-</span>
-
-          {INTEREST_TRANSLATIONS[interest]?.[language] || interest}
-
-        </button>
-
-      );
-
-    })}
-
-  </div>
+            <span>
+              {INTEREST_TRANSLATIONS[interest]?.[language] || interest}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  </details>
 
   <div className="interest-count">
-
     {selectedInterests.length} / 5 {t.selected}
-
   </div>
-
 </div>
 
             <div className="form-grid">
