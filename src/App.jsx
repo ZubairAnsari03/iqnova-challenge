@@ -1937,6 +1937,16 @@ setPage("quiz");
 
                 <p className="email-note">Payment option available hote hi tumhare entered email par unlock instructions bhi bhej diye jaate hain.</p>
 
+                <button
+  className="secondary-button"
+  onClick={() => {
+    setPage("home");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }}
+>
+  ← Back to Home
+</button>
+
               </>
 
             )}
@@ -2048,6 +2058,16 @@ setPage("quiz");
                   Certificate PDF tumhare entered email par bhi bheja jaata hai after verified payment.
 
                 </p>
+
+                <button
+  className="secondary-button"
+  onClick={() => {
+    setPage("home");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }}
+>
+  ← Back to Home
+</button>
 
               </div>
 
