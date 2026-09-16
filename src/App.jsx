@@ -674,7 +674,11 @@ setPage("quiz");
         <span>{currentQuestion.difficulty}</span>
       </div>
 
-      <h1>{questionText}</h1>
+      <h1>
+  {currentQuestion?.question?.[language] ||
+    currentQuestion?.question?.en ||
+    ""}
+</h1>
 
       <div className="options">
   {questionOptions.map((option, index) => (
