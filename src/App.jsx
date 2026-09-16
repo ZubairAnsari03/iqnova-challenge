@@ -651,6 +651,7 @@ setPage("quiz");
 
       {page === "quiz" && currentQuestion && (
   <main className="quiz-page">
+
     <div className="quiz-top">
       <span>
         {t.question} {current + 1} / {quizQuestions.length}
@@ -674,33 +675,50 @@ setPage("quiz");
     </div>
 
     <div className="question-card">
+
       <div className="question-header">
         <div className="question-number">
           {String(current + 1).padStart(2, "0")}
         </div>
+
         <span>{currentQuestion.difficulty}</span>
       </div>
 
-      <h1>{questionText}</h1>
+      <h1>
+        {language === "english"
+          ? currentQuestion.question.en
+          : language === "hindi"
+            ? currentQuestion.question.hi
+            : currentQuestion.question.hinglish}
+      </h1>
 
       <div className="options">
-  {questionOptions.map((option, index) => (
-    <button
-      key={index}
-      type="button"
-      className={`option ${answers[current] === index ? "selected" : ""}`}
-      onClick={() =>
-        setAnswers((prev) => ({
-          ...prev,
-          [current]: index,
-        }))
-      }
-    >
-      <span>{String.fromCharCode(65 + index)}</span>
-      <span>{option}</span>
-    </button>
-  ))}
-</div>
+        {(language === "english"
+          ? currentQuestion.options.en
+          : language === "hindi"
+            ? currentQuestion.options.hi
+            : currentQuestion.options.hinglish
+        ).map((option, index) => (
+          <button
+            key={index}
+            type="button"
+            className={
+              answers[current] === index
+                ? "option selected"
+                : "option"
+            }
+            onClick={() =>
+              setAnswers((prev) => ({
+                ...prev,
+                [current]: index,
+              }))
+            }
+          >
+            <span>{String.fromCharCode(65 + index)}</span>
+            <span>{option}</span>
+          </button>
+        ))}
+      </div>
 
       <button
         className="primary-button next-button"
@@ -712,6 +730,7 @@ setPage("quiz");
           : t.next}
         <span>→</span>
       </button>
+
     </div>
   </main>
 )}
