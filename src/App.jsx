@@ -4,133 +4,31 @@ import "./App_mobile_premium.css";
 
 const API = "https://iqnova-challenge.onrender.com";
 
-const questions = [
-  {
-    difficulty: "Easy",
-    en: "What comes next? 🔵 ⭐ → 🔵 ⭐⭐ → 🔵 ⭐⭐⭐ → ?",
-    hi: "अगला पैटर्न कौन सा होगा? 🔵 ⭐ → 🔵 ⭐⭐ → 🔵 ⭐⭐⭐ → ?",
-    hinglish: "Agla pattern kaunsa hoga? 🔵 ⭐ → 🔵 ⭐⭐ → 🔵 ⭐⭐⭐ → ?",
-    options: ["🔴 ⭐⭐⭐⭐", "🔵 ⭐⭐⭐⭐", "🔵 ⭐⭐", "⭐⭐⭐⭐"],
-    answer: 1,
-  },
-  {
-    difficulty: "Easy",
-    en: "Which one is different from the others?",
-    hi: "इनमें से बाकी से अलग कौन सा है?",
-    hinglish: "Inmein se baaki sabse different kaunsa hai?",
-    options: ["▲", "▲", "▲", "▼"],
-    answer: 3,
-  },
-  {
-    difficulty: "Easy",
-    en: "CAT : KITTEN :: DOG : ?",
-    hi: "CAT : KITTEN :: DOG : ?",
-    hinglish: "CAT ka relation KITTEN se hai, waise DOG ka relation kis se hai?",
-    options: ["Cub", "Puppy", "Calf", "Foal"],
-    answer: 1,
-  },
-
-  {
-    difficulty: "Hard",
-    en: "You overtake the runner in 2nd position. What is your position?",
-    hi: "आपने दूसरे स्थान वाले धावक को पीछे छोड़ दिया। अब आपकी स्थिति क्या है?",
-    hinglish: "Tum 2nd position wale runner ko overtake karte ho. Ab tumhari position kya hai?",
-    options: ["1st", "2nd", "3rd", "Last"],
-    answer: 1,
-  },
-  {
-    difficulty: "Hard",
-    en: "A clock shows 3:15. What is the smaller angle between the hands?",
-    hi: "घड़ी में 3:15 बज रहे हैं। दोनों सुइयों के बीच छोटा कोण कितना है?",
-    hinglish: "Clock mein 3:15 baj rahe hain. Hands ke beech smaller angle kitna hai?",
-    options: ["0°", "7.5°", "15°", "22.5°"],
-    answer: 1,
-  },
-  {
-    difficulty: "Hard",
-    en: "What comes next? AZ → BY → CX → DW → ?",
-    hi: "अगला जोड़ा कौन सा होगा? AZ → BY → CX → DW → ?",
-    hinglish: "Agla pair kaunsa hoga? AZ → BY → CX → DW → ?",
-    options: ["EU", "EV", "FU", "EX"],
-    answer: 1,
-  },
-  {
-    difficulty: "Hard",
-    en: "A father is 4 times as old as his son. In 20 years, he will be twice his son's age. How old is the son now?",
-    hi: "पिता की उम्र बेटे की उम्र की 4 गुना है। 20 साल बाद पिता बेटे की उम्र के 2 गुना होंगे। बेटे की वर्तमान उम्र क्या है?",
-    hinglish: "Father ki age son ki age se 4 times hai. 20 years baad father son ki age se 2 times honge. Son ki current age kya hai?",
-    options: ["8", "10", "12", "15"],
-    answer: 1,
-  },
-
-  {
-    difficulty: "Very Hard",
-    en: "What comes next? 3, 8, 18, 38, 78, ?",
-    hi: "अगला अंक कौन सा होगा? 3, 8, 18, 38, 78, ?",
-    hinglish: "Agla number kaunsa hoga? 3, 8, 18, 38, 78, ?",
-    options: ["148", "156", "158", "160"],
-    answer: 2,
-  },
-  {
-    difficulty: "Very Hard",
-    en: "Three switches control three bulbs in another room. You can enter the bulb room only once. How can you identify all three switches?",
-    hi: "तीन स्विच दूसरे कमरे के तीन बल्ब नियंत्रित करते हैं। आप बल्ब वाले कमरे में केवल एक बार जा सकते हैं। तीनों स्विच कैसे पहचानेंगे?",
-    hinglish: "3 switches doosre room ke 3 bulbs control karte hain. Bulb room mein sirf ek baar ja sakte ho. Teeno switches kaise identify karoge?",
-    options: [
-      "Only look at the switches",
-      "Turn one switch ON and enter immediately",
-      "Turn one bulb ON, wait, turn it OFF, turn second ON, then enter",
-      "It is impossible",
-    ],
-    answer: 2,
-  },
-  {
-    difficulty: "Very Hard",
-    en: "Three boxes are labelled APPLES, ORANGES and MIXED. Every label is wrong. Which box should you pick one fruit from to identify all three boxes?",
-    hi: "तीन डिब्बों पर APPLES, ORANGES और MIXED लिखा है। हर लेबल गलत है। सभी डिब्बों की पहचान करने के लिए किस डिब्बे से एक फल निकालेंगे?",
-    hinglish: "3 boxes par APPLES, ORANGES aur MIXED labels hain, lekin teeno labels wrong hain. Sab identify karne ke liye kis box se fruit nikaloge?",
-    options: ["APPLES", "ORANGES", "MIXED", "Any box"],
-    answer: 2,
-  },
-
-  {
-    difficulty: "Extreme",
-    en: "What comes next? ⬆️ → ➡️ → ⬇️ → ⬅️ → ?",
-    hi: "अगला तीर किस दिशा में होगा? ⬆️ → ➡️ → ⬇️ → ⬅️ → ?",
-    hinglish: "Agla arrow kis direction mein hoga? ⬆️ → ➡️ → ⬇️ → ⬅️ → ?",
-    options: ["⬆️", "➡️", "⬇️", "↗️"],
-    answer: 0,
-  },
-  {
-    difficulty: "Extreme",
-    en: "A farmer must cross a river with a wolf, a goat and a cabbage. He can carry only one at a time. What should he take first?",
-    hi: "एक किसान को भेड़िया, बकरी और पत्तागोभी के साथ नदी पार करनी है। वह एक बार में केवल एक चीज ले जा सकता है। उसे सबसे पहले क्या ले जाना चाहिए?",
-    hinglish: "Farmer ko wolf, goat aur cabbage ke saath river cross karni hai. Ek baar mein sirf ek cheez le ja sakta hai. Sabse pehle kya le jayega?",
-    options: ["Wolf", "Goat", "Cabbage", "Wolf + Goat"],
-    answer: 1,
-  },
-  {
-    difficulty: "Extreme",
-    en: "You have 9 identical-looking balls. One is heavier. What is the minimum number of balance-scale weighings needed to definitely find it?",
-    hi: "आपके पास 9 एक जैसी दिखने वाली गेंदें हैं। उनमें से एक भारी है। उसे निश्चित रूप से खोजने के लिए कम से कम कितनी बार तराजू से तौलना होगा?",
-    hinglish: "9 same-looking balls hain. Ek ball heavy hai. Use definitely find karne ke liye minimum kitni weighings chahiye?",
-    options: ["1", "2", "3", "4"],
-    answer: 1,
-  },
+const INTERESTS = [
+  "📚 Education & Study",
+  "📱 Social Media",
+  "🏏 Cricket & Sports",
+  "🎬 Movies & Entertainment",
+  "🌍 World & Politics",
+  "❤️ Relationship & Social Situations",
+  "🧠 Quiz & General Knowledge",
+  "🧩 Puzzle & Mathematics",
 ];
+
+const QUESTION_COUNT = 15;
 
 const translations = {
   english: {
     how: "How It Works", why: "Why IQNova", verify: "Certificate Verify", start: "Start Challenge",
-    badge: "13-Question Intelligence Challenge", title: "Challenge the way you think.",
+    badge: "15-Question Intelligence Challenge", title: "Challenge the way you think.",
     desc: "Test your logical reasoning, pattern recognition, numerical thinking and problem-solving skills with the IQNova Challenge.",
-    learn: "Learn More", noLogin: "No login required", questions: "13 questions", unlock: "One-time ₹13 unlock",
+    learn: "Learn More", noLogin: "No login required", questions: "15 questions", unlock: "One-time ₹19 unlock",
     experience: "THE IQNOVA EXPERIENCE", built: "Built to challenge your thinking.",
     warmup: "From easy warm-ups to extreme reasoning puzzles.", levels: "4 Difficulty Levels",
     levelsDesc: "Easy, Hard, Very Hard and Extreme.", report: "Instant Report",
     reportDesc: "Unlock your score, analysis and certificate.", certificate: "CERTIFICATE",
     verifyTitle: "Verify an IQNova certificate.", verifyDesc: "Check a certificate using its unique Certificate ID.",
-    verifyBtn: "Verify Certificate", before: "Before we begin.", details: "Enter your details to start the 13-question challenge.",
+    verifyBtn: "Verify Certificate", before: "Before we begin.", details: "Enter your details to start the 15-question challenge.",
     name: "Full Name", age: "Age", email: "Email", begin: "Start the Test", back: "Back",
     question: "Question", next: "Next Question", finish: "Complete Challenge", complete: "CHALLENGE COMPLETE",
     resultReady: "Your result is ready.", fullUnlock: "One-time full result unlock", unlockResult: "Unlock Full Result",
@@ -139,19 +37,20 @@ const translations = {
     review: "Answer Review", resultUnlocked: "Result Unlocked!", download: "Download Certificate PDF",
     verifyHeading: "Certificate Verification", verifyInput: "Enter Certificate ID", verifyCheck: "Check Certificate",
     verified: "Certificate Verified", notFound: "Certificate not found.", backHome: "Back to Home",
-    footer: "IQNova is an educational intelligence challenge and is not a clinically validated IQ assessment."
+    interestTitle: "🧠 Choose Your Interests", interestDesc: "Select exactly 5 topics for your personalized challenge.", selected: "selected",
+     footer: "IQNova is an educational intelligence challenge and is not a clinically validated IQ assessment."
   },
   hindi: {
     how: "यह कैसे काम करता है", why: "IQNova क्यों", verify: "सर्टिफिकेट सत्यापित करें", start: "चैलेंज शुरू करें",
-    badge: "13 प्रश्नों की बुद्धिमत्ता चुनौती", title: "अपनी सोच को चुनौती दें।",
+    badge: "15 प्रश्नों की बुद्धिमत्ता चुनौती", title: "अपनी सोच को चुनौती दें।",
     desc: "IQNova Challenge के साथ अपनी तार्किक सोच, पैटर्न पहचान, संख्यात्मक सोच और समस्या-समाधान कौशल को परखें।",
-    learn: "और जानें", noLogin: "लॉगिन की जरूरत नहीं", questions: "13 प्रश्न", unlock: "एक बार ₹13 में अनलॉक",
+    learn: "और जानें", noLogin: "लॉगिन की जरूरत नहीं", questions: "15 प्रश्न", unlock: "एक बार ₹19 में अनलॉक",
     experience: "IQNOVA का अनुभव", built: "आपकी सोच को चुनौती देने के लिए बनाया गया।",
     warmup: "आसान शुरुआत से लेकर कठिन तर्क पहेलियों तक।", levels: "4 कठिनाई स्तर",
     levelsDesc: "आसान, कठिन, बहुत कठिन और अत्यंत कठिन।", report: "तुरंत रिपोर्ट",
     reportDesc: "अपना स्कोर, विश्लेषण और सर्टिफिकेट अनलॉक करें।", certificate: "सर्टिफिकेट",
     verifyTitle: "IQNova सर्टिफिकेट सत्यापित करें।", verifyDesc: "अपने यूनिक Certificate ID से सर्टिफिकेट चेक करें.",
-    verifyBtn: "सर्टिफिकेट सत्यापित करें", before: "शुरू करने से पहले।", details: "13 प्रश्नों की चुनौती शुरू करने के लिए अपनी जानकारी भरें।",
+    verifyBtn: "सर्टिफिकेट सत्यापित करें", before: "शुरू करने से पहले।", details: "15 प्रश्नों की चुनौती शुरू करने के लिए अपनी जानकारी भरें।",
     name: "पूरा नाम", age: "उम्र", email: "ईमेल", begin: "टेस्ट शुरू करें", back: "वापस",
     question: "प्रश्न", next: "अगला प्रश्न", finish: "चैलेंज पूरा करें", complete: "चैलेंज पूरा हुआ",
     resultReady: "आपका परिणाम तैयार है।", fullUnlock: "एक बार में पूरा परिणाम अनलॉक", unlockResult: "पूरा परिणाम अनलॉक करें",
@@ -160,19 +59,20 @@ const translations = {
     review: "उत्तर समीक्षा", resultUnlocked: "परिणाम अनलॉक!", download: "सर्टिफिकेट PDF डाउनलोड करें",
     verifyHeading: "सर्टिफिकेट सत्यापन", verifyInput: "Certificate ID डालें", verifyCheck: "सर्टिफिकेट चेक करें",
     verified: "सर्टिफिकेट सत्यापित है", notFound: "सर्टिफिकेट नहीं मिला।", backHome: "होम पर वापस जाएं",
-    footer: "IQNova एक शैक्षिक बुद्धिमत्ता चुनौती है और यह clinically validated IQ assessment नहीं है।"
+    interestTitle: "🧠 अपनी रुचियां चुनें", interestDesc: "अपने personalized challenge के लिए ठीक 5 topics चुनें।", selected: "चयनित",
+     footer: "IQNova एक शैक्षिक बुद्धिमत्ता चुनौती है और यह clinically validated IQ assessment नहीं है।"
   },
   hinglish: {
     how: "Kaise Kaam Karta Hai", why: "IQNova Kyun", verify: "Certificate Verify", start: "Challenge Start Karo",
-    badge: "13-Question Intelligence Challenge", title: "Apni thinking ko challenge karo.",
+    badge: "15-Question Intelligence Challenge", title: "Apni thinking ko challenge karo.",
     desc: "IQNova Challenge ke saath apni logical reasoning, pattern recognition, numerical thinking aur problem-solving skills test karo.",
-    learn: "Aur Jaano", noLogin: "Login ki zarurat nahi", questions: "13 questions", unlock: "One-time ₹13 unlock",
+    learn: "Aur Jaano", noLogin: "Login ki zarurat nahi", questions: "15 questions", unlock: "One-time ₹19 unlock",
     experience: "THE IQNOVA EXPERIENCE", built: "Tumhari thinking ko challenge karne ke liye banaya gaya.",
     warmup: "Easy warm-up se lekar extreme reasoning puzzles tak.", levels: "4 Difficulty Levels",
     levelsDesc: "Easy, Hard, Very Hard aur Extreme.", report: "Instant Report",
     reportDesc: "Apna score, analysis aur certificate unlock karo.", certificate: "CERTIFICATE",
     verifyTitle: "IQNova certificate verify karo.", verifyDesc: "Unique Certificate ID se certificate check karo.",
-    verifyBtn: "Certificate Verify Karo", before: "Shuru karne se pehle.", details: "13-question challenge start karne ke liye apni details bharo.",
+    verifyBtn: "Certificate Verify Karo", before: "Shuru karne se pehle.", details: "15-question challenge start karne ke liye apni details bharo.",
     name: "Full Name", age: "Age", email: "Email", begin: "Test Shuru Karo", back: "Back",
     question: "Question", next: "Next Question", finish: "Challenge Complete Karo", complete: "CHALLENGE COMPLETE",
     resultReady: "Tumhara result ready hai.", fullUnlock: "One-time full result unlock", unlockResult: "Full Result Unlock Karo",
@@ -181,7 +81,8 @@ const translations = {
     review: "Answer Review", resultUnlocked: "Result Unlocked!", download: "Download Certificate PDF",
     verifyHeading: "Certificate Verification", verifyInput: "Certificate ID daalo", verifyCheck: "Certificate Check Karo",
     verified: "Certificate Verified", notFound: "Certificate nahi mila.", backHome: "Home par wapas",
-    footer: "IQNova ek educational intelligence challenge hai, clinically validated IQ assessment nahi hai."
+    interestTitle: "🧠 Apni Interests Chuno", interestDesc: "Apne personalized challenge ke liye exactly 5 topics select karo.", selected: "selected",
+     footer: "IQNova ek educational intelligence challenge hai, clinically validated IQ assessment nahi hai."
   }
 };
 
@@ -203,9 +104,9 @@ function performanceText(score, language) {
 function analysisForResult(result, language) {
   const groups = [
   { key: "Easy", label: "Easy", max: 12 },
-  { key: "Hard", label: "Hard", max: 28 },
-  { key: "Very Hard", label: "Very Hard", max: 27 },
-  { key: "Extreme", label: "Extreme", max: 33 }
+  { key: "Hard", label: "Hard", max: 20 },
+  { key: "Very Hard", label: "Very Hard", max: 32 },
+  { key: "Extreme", label: "Extreme", max: 36 }
 ];
 
   return groups.map((group) => {
@@ -223,6 +124,8 @@ function App() {
   const [page, setPage] = useState("home");
   const [language, setLanguage] = useState("hinglish");
   const [current, setCurrent] = useState(0);
+  const [selectedInterests, setSelectedInterests] = useState([]);
+const [quizQuestions, setQuizQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [student, setStudent] = useState({ name: "", age: "", email: "" });
   const [sessionId, setSessionId] = useState("");
@@ -235,7 +138,7 @@ function App() {
   const [verifyLoading, setVerifyLoading] = useState(false);
 
   const t = translations[language];
-  const currentQuestion = questions[current];
+  const currentQuestion = quizQuestions[current];
 
   const loadPaidResult = async (sid) => {
     const response = await fetch(`${API}/api/challenge/result/${sid}`);
@@ -311,6 +214,16 @@ if (callbackSession) {
   }, []);
 
   const startChallenge = async () => {
+    if (selectedInterests.length !== 5) {
+  alert(
+    language === "hindi"
+      ? "कृपया ठीक 5 रुचियां चुनें।"
+      : language === "english"
+        ? "Please select exactly 5 interests."
+        : "Bhai exactly 5 interests select karo."
+  );
+  return;
+}
     if (!student.name || !student.age || !student.email) {
       alert(
         language === "hindi"
@@ -332,7 +245,8 @@ if (callbackSession) {
           sessionId: newSessionId,
           name: student.name,
           age: student.age,
-          email: student.email
+          email: student.email,
+          interests: selectedInterests
         })
       });
 
@@ -343,12 +257,19 @@ if (callbackSession) {
       }
 
       setSessionId(newSessionId);
-      setPaymentPaid(false);
-      setServerResult(null);
-      setCertificateId("");
-      setCurrent(0);
-      setAnswers({});
-      setPage("quiz");
+setPaymentPaid(false);
+setServerResult(null);
+setCertificateId("");
+setCurrent(0);
+setAnswers({});
+
+if (!Array.isArray(data.questions) || data.questions.length !== QUESTION_COUNT) {
+  throw new Error("15 questions generate nahi hue.");
+}
+
+setQuizQuestions(data.questions);
+
+setPage("quiz");
 
       localStorage.setItem("iqnova_session_id", newSessionId);
       localStorage.setItem("iqnova_student", JSON.stringify(student));
@@ -369,7 +290,7 @@ if (callbackSession) {
   };
 
   const nextQuestion = async () => {
-    if (current < questions.length - 1) {
+    if (current < quizQuestions.length - 1) {
       setCurrent((prev) => prev + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -586,13 +507,13 @@ if (callbackSession) {
               <div className="mini-label">IQNOVA</div>
               <h2>IQ Challenge</h2>
               <div className="score-preview">
-                <div><strong>{questions.length}</strong><span>{t.questions}</span></div>
+                <div><strong>{QUESTION_COUNT}</strong><span>{t.questions}</span></div>
                 <div><strong>100</strong><span>Max Score</span></div>
               </div>
               <div className="difficulty">
                 <span>Easy</span><span>Hard</span><span>Very Hard</span><span>Extreme</span>
               </div>
-              <div className="card-footer"><span>IQNOVA</span><span>01 — {questions.length}</span></div>
+              <div className="card-footer"><span>IQNOVA</span><span>01 — {QUESTION_COUNT}</span></div>
             </div>
           </main>
 
@@ -626,6 +547,45 @@ if (callbackSession) {
             <div className="badge">IQNOVA — IQ CHALLENGE</div>
             <h1>{t.before}</h1>
             <p>{t.details}</p>
+            
+            <div className="interest-section">
+  <h2>{t.interestTitle}</h2>
+  <p>{t.interestDesc}</p>
+
+  <div className="interest-grid">
+    {INTERESTS.map((interest) => {
+      const selected = selectedInterests.includes(interest);
+
+      return (
+        <button
+          type="button"
+          key={interest}
+          className={`interest-card ${selected ? "selected" : ""}`}
+          onClick={() => {
+            setSelectedInterests((prev) => {
+              if (prev.includes(interest)) {
+                return prev.filter((item) => item !== interest);
+              }
+
+              if (prev.length >= 5) {
+                return prev;
+              }
+
+              return [...prev, interest];
+            });
+          }}
+        >
+          <span>{selected ? "✓" : "○"}</span>
+          {interest}
+        </button>
+      );
+    })}
+  </div>
+
+  <div className="interest-count">
+    {selectedInterests.length} / 5 {t.selected}
+  </div>
+</div>
 
             <div className="form-grid">
               <label>{t.name}
@@ -640,22 +600,22 @@ if (callbackSession) {
             </div>
 
             <div className="start-actions">
-              <button className="secondary-button" onClick={() => setPage("home")}>← {t.back}</button>
+              <button className="secondary-button" onClick={() => { setSelectedInterests([]); setPage("home"); }}>← {t.back}</button>
               <button className="primary-button" onClick={startChallenge}>{t.begin}<span>→</span></button>
             </div>
           </div>
         </main>
       )}
 
-      {page === "quiz" && (
+      {page === "quiz" && currentQuestion && (
         <main className="quiz-page">
           <div className="quiz-top">
-            <span>{t.question} {current + 1} / {questions.length}</span>
+            <span>{t.question} {current + 1} / {quizQuestions.length}</span>
             <span className={`difficulty-label ${currentQuestion.difficulty.toLowerCase().replace(" ", "-")}`}>{currentQuestion.difficulty}</span>
           </div>
 
           <div className="progress">
-            <div style={{ width: `${((current + 1) / questions.length) * 100}%` }} />
+            <div style={{ width: `${((current + 1) / quizQuestions.length) * 100}%` }} />
           </div>
 
           <div className="question-card">
@@ -665,15 +625,20 @@ if (callbackSession) {
             </div>
 
             <h1>
-  {language === "english"
-    ? currentQuestion.en
-    : language === "hindi"
-      ? currentQuestion.hi
-      : currentQuestion.hinglish}
-</h1>
+              {language === "english"
+                ? currentQuestion.question.en
+                : language === "hindi"
+                  ? currentQuestion.question.hi
+                  : currentQuestion.question.hinglish}
+            </h1>
 
             <div className="options">
-              {currentQuestion.options.map((option, index) => (
+              {(language === "english"
+                ? currentQuestion.options.en
+                : language === "hindi"
+                  ? currentQuestion.options.hi
+                  : currentQuestion.options.hinglish
+              ).map((option, index) => (
                 <button
                   key={index}
                   className={answers[current] === index ? "option selected" : "option"}
@@ -685,12 +650,13 @@ if (callbackSession) {
             </div>
 
             <button className="primary-button next-button" disabled={answers[current] === undefined} onClick={nextQuestion}>
-              {current === questions.length - 1 ? t.finish : t.next}<span>→</span>
+              {current === quizQuestions.length - 1 ? t.finish : t.next}<span>→</span>
             </button>
           </div>
+
         </main>
       )}
-
+      
       {page === "result" && (
         <main className="start-page">
           <div className="start-box result-box">

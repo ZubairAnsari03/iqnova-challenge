@@ -16,16 +16,182 @@ const FRONTEND_URL = (process.env.FRONTEND_URL || "http://localhost:5174").repla
 const AMOUNT_PAISE = 1900;
 const CURRENCY = "INR";
 
-const ANSWERS = [
-  1, 3, 1, 1, 1,
-  1, 1, 2, 2, 2,
-  0, 1, 1
+const QUESTION_COUNT = 15;
+
+const INTERESTS = [
+  "📚 Education & Study",
+  "📱 Social Media",
+  "🏏 Cricket & Sports",
+  "🎬 Movies & Entertainment",
+  "🌍 World & Politics",
+  "❤️ Relationship & Social Situations",
+  "🧠 Quiz & General Knowledge",
+  "🧩 Puzzle & Mathematics",
 ];
-const WEIGHTS = [
-  4, 4, 4,
-  7, 7, 7, 7,
-  9, 9, 9,
-  11, 11, 11
+
+const INTEREST_CATEGORY_MAP = {
+  "📚 Education & Study": "Education",
+  "📱 Social Media": "Social Media",
+  "🏏 Cricket & Sports": "Cricket & Sports",
+  "🎬 Movies & Entertainment": "Movies & Entertainment",
+  "🌍 World & Politics": "World & Politics",
+  "❤️ Relationship & Social Situations": "Relationship",
+  "🧠 Quiz & General Knowledge": "Quiz & General Knowledge",
+  "🧩 Puzzle & Mathematics": "Puzzle & Mathematics",
+};
+
+const QUESTION_BANK = [
+  // 📚 EDUCATION & STUDY
+  ...[
+    ["E01","Easy","What is 20% of 100?","100 का 20% कितना है?","100 ka 20% kitna hai?",["10","20","25","30"],1],
+    ["E02","Easy","How many days are there in a week?","एक सप्ताह में कितने दिन होते हैं?","Ek week mein kitne din hote hain?",["5","6","7","8"],2],
+    ["E03","Easy","Which method uses short focused study sessions with breaks?","कौन-सी विधि छोटे केंद्रित अध्ययन सत्रों और बीच-बीच में विराम का उपयोग करती है?","Kaunsi method short focused study sessions aur breaks use karti hai?",["Pomodoro","Random Study","Speed Reading","Night Shift"],0],
+    ["E04","Hard","If a student scores 72 out of 90, what is the percentage?","यदि किसी विद्यार्थी को 90 में से 72 अंक मिले, तो प्रतिशत कितना है?","Agar student ko 90 mein se 72 marks mile, to percentage kitni hai?",["70%","75%","80%","85%"],2],
+    ["E05","Hard","A book has 240 pages. If you read 30 pages daily, how many days will it take?","एक पुस्तक में 240 पृष्ठ हैं। यदि आप प्रतिदिन 30 पृष्ठ पढ़ते हैं, तो कितने दिन लगेंगे?","Book mein 240 pages hain. Roz 30 pages padho to kitne din lagenge?",["6","8","10","12"],1],
+    ["E06","Hard","What is the average of 60, 70 and 80?","60, 70 और 80 का औसत कितना है?","60, 70 aur 80 ka average kitna hai?",["65","70","75","80"],1],
+    ["E07","Very Hard","If 25% of a number is 45, what is the number?","किसी संख्या का 25% 45 है। वह संख्या क्या है?","Kisi number ka 25% 45 hai. Number kya hai?",["120","160","180","200"],2],
+    ["E08","Very Hard","A student improves from 60 to 75 marks. What is the increase?","एक विद्यार्थी के अंक 60 से बढ़कर 75 हो गए। वृद्धि कितनी हुई?","Student ke marks 60 se 75 ho gaye. Increase kitna hua?",["10","15","20","25"],1],
+    ["E09","Very Hard","If 3 notebooks cost ₹180, what is the cost of 7 notebooks?","यदि 3 कॉपियों की कीमत ₹180 है, तो 7 कॉपियों की कीमत कितनी होगी?","Agar 3 notebooks ₹180 ki hain, to 7 notebooks kitne ki hongi?",["₹360","₹400","₹420","₹450"],2],
+    ["E10","Extreme","A test has 50 questions. A student gets 42 correct. What percentage is correct?","एक परीक्षा में 50 प्रश्न हैं। विद्यार्थी ने 42 सही किए। सही उत्तरों का प्रतिशत कितना है?","Test mein 50 questions hain aur 42 correct hain. Correct percentage kitni hai?",["76%","80%","84%","88%"],2],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Education", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // 📱 SOCIAL MEDIA
+  ...[
+    ["S01","Easy","What does a like usually indicate on social media?","सोशल मीडिया पर लाइक आमतौर पर क्या दर्शाता है?","Social media par like usually kya show karta hai?",["Engagement","Password","Location","Username"],0],
+    ["S02","Easy","What is a hashtag mainly used for?","हैशटैग का मुख्य रूप से उपयोग किस लिए किया जाता है?","Hashtag mainly kis kaam aata hai?",["Discovering related content","Changing password","Calling someone","Editing photos"],0],
+    ["S03","Easy","If a Reel gets 1,000 views and 100 likes, what is the like rate?","यदि किसी रील को 1,000 व्यूज़ और 100 लाइक मिलते हैं, तो लाइक दर कितनी है?","Reel ko 1,000 views aur 100 likes mile. Like rate kitna hai?",["5%","10%","15%","20%"],1],
+    ["S04","Hard","A post gets 500 likes from 5,000 followers. What percentage of followers liked it?","5,000 फॉलोअर्स में से 500 ने पोस्ट को लाइक किया। कितने प्रतिशत फॉलोअर्स ने लाइक किया?","5,000 followers mein se 500 ne like kiya. Kitne percent followers ne like kiya?",["5%","10%","15%","20%"],1],
+    ["S05","Hard","What does engagement generally include?","एंगेजमेंट में आमतौर पर क्या शामिल होता है?","Engagement mein generally kya include hota hai?",["Likes, comments and shares","Only followers","Only passwords","Only profile visits"],0],
+    ["S06","Hard","A video gets 20,000 views and 5% viewers like it. How many likes?","किसी वीडियो को 20,000 व्यूज़ मिले और 5% दर्शकों ने लाइक किया। कितने लाइक हुए?","Video ko 20,000 views mile aur 5% ne like kiya. Kitne likes hue?",["500","750","1,000","1,500"],2],
+    ["S07","Very Hard","A post gets 2,000 likes and 200 comments. What is the combined engagement count?","किसी पोस्ट को 2,000 लाइक और 200 कमेंट मिले। कुल एंगेजमेंट कितना है?","Post ko 2,000 likes aur 200 comments mile. Total engagement kitna hai?",["2,000","2,100","2,200","2,400"],2],
+    ["S08","Very Hard","A creator has 10,000 followers and gains 15%. How many new followers?","किसी क्रिएटर के 10,000 फॉलोअर्स हैं और 15% वृद्धि होती है। नए फॉलोअर्स कितने होंगे?","Creator ke 10,000 followers hain aur 15% growth hoti hai. New followers kitne honge?",["1,000","1,500","2,000","2,500"],1],
+    ["S09","Very Hard","A Reel gets 40,000 views. If 2.5% viewers share it, how many shares?","रील को 40,000 व्यूज़ मिले। यदि 2.5% दर्शक उसे शेयर करते हैं, तो कितने शेयर होंगे?","Reel ko 40,000 views mile. 2.5% log share karein to kitne shares honge?",["500","750","1,000","1,250"],2],
+    ["S10","Extreme","A page grows from 20,000 to 26,000 followers. What is the growth percentage?","किसी पेज के फॉलोअर्स 20,000 से बढ़कर 26,000 हो गए। वृद्धि प्रतिशत कितना है?","Page followers 20,000 se 26,000 ho gaye. Growth percentage kitni hai?",["20%","25%","30%","35%"],2],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Social Media", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // 🏏 CRICKET & SPORTS
+  ...[
+    ["C01","Easy","How many legal balls are there in a cricket over?","क्रिकेट के एक ओवर में कितनी वैध गेंदें होती हैं?","Cricket ke ek over mein kitni legal balls hoti hain?",["4","5","6","8"],2],
+    ["C02","Easy","How many players are on the field for one cricket team?","क्रिकेट की एक टीम के कितने खिलाड़ी मैदान पर होते हैं?","Cricket team ke kitne players field par hote hain?",["9","10","11","12"],2],
+    ["C03","Easy","If a batter scores 4 and then 6, how many runs?","यदि बल्लेबाज़ 4 और फिर 6 रन बनाता है, तो कुल कितने रन होंगे?","Batter 4 aur phir 6 runs banata hai. Total kitne runs?",["8","9","10","12"],2],
+    ["C04","Hard","A team needs 60 runs from 30 balls. What run rate is required?","एक टीम को 30 गेंदों में 60 रन चाहिए। आवश्यक रन रेट क्या होगा?","Team ko 30 balls mein 60 runs chahiye. Required run rate kya hoga?",["1","2","3","4"],1],
+    ["C05","Hard","A batter scores 35, 45 and 20 in three matches. What is the average?","एक बल्लेबाज़ तीन मैचों में 35, 45 और 20 रन बनाता है। औसत कितना है?","Batter 3 matches mein 35, 45 aur 20 runs banata hai. Average kya hai?",["30","33.33","35","40"],1],
+    ["C06","Hard","How many points does a win give in many standard league formats?","कई मानक लीग प्रारूपों में जीत के लिए कितने अंक दिए जाते हैं?","Kai standard league formats mein win ke liye kitne points milte hain?",["1","2","3","4"],2],
+    ["C07","Very Hard","A team scores 180 runs in 20 overs. What is the run rate?","एक टीम 20 ओवर में 180 रन बनाती है। रन रेट कितना है?","Team 20 overs mein 180 runs banati hai. Run rate kitna hai?",["7","8","9","10"],2],
+    ["C08","Very Hard","A batter needs 24 runs from 12 balls. What is the required run rate per over?","एक बल्लेबाज़ को 12 गेंदों में 24 रन चाहिए। आवश्यक रन रेट प्रति ओवर कितना है?","Batter ko 12 balls mein 24 runs chahiye. Required run rate per over kitna hai?",["8","10","12","14"],2],
+    ["C09","Very Hard","A team scores 96 runs in 8 overs. What is its run rate?","एक टीम 8 ओवर में 96 रन बनाती है। उसका रन रेट कितना है?","Team 8 overs mein 96 runs banati hai. Run rate kitna hai?",["10","12","14","16"],1],
+    ["C10","Extreme","A batter scores 42, 68, 35, 91 and 64. What is the average?","एक बल्लेबाज़ 42, 68, 35, 91 और 64 रन बनाता है। औसत कितना है?","Batter 42, 68, 35, 91 aur 64 runs banata hai. Average kitna hai?",["58","60","62","64"],1],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Cricket & Sports", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // 🎬 MOVIES & ENTERTAINMENT
+  ...[
+    ["M01","Easy","What is a sequel?","सीक्वल क्या होता है?","Sequel kya hota hai?",["A continuation of a story","A trailer","A poster","A soundtrack"],0],
+    ["M02","Easy","What is a movie trailer mainly used for?","फिल्म का ट्रेलर मुख्य रूप से किस लिए होता है?","Movie trailer mainly kis liye hota hai?",["Promoting the movie","Changing the ending","Recording sound","Selling tickets only"],0],
+    ["M03","Easy","How many minutes are in 2 hours?","2 घंटे में कितने मिनट होते हैं?","2 hours mein kitne minutes hote hain?",["60","90","120","150"],2],
+    ["M04","Hard","A movie is 150 minutes long. How many hours and minutes is that?","एक फिल्म 150 मिनट लंबी है। यह कितने घंटे और मिनट हैं?","Movie 150 minutes ki hai. Ye kitne hours aur minutes hain?",["2h 10m","2h 20m","2h 30m","3h"],2],
+    ["M05","Hard","A cinema has 400 seats and 75% are occupied. How many are occupied?","सिनेमा हॉल में 400 सीटें हैं और 75% भरी हुई हैं। कितनी सीटें भरी हैं?","Cinema mein 400 seats hain aur 75% occupied hain. Kitni seats occupied hain?",["250","300","325","350"],1],
+    ["M06","Hard","A film earns ₹120 crore on a ₹80 crore budget. How much is the profit before other costs?","फिल्म ₹80 करोड़ के बजट पर ₹120 करोड़ कमाती है। अन्य लागतों से पहले लाभ कितना है?","Film ka budget ₹80 crore aur earning ₹120 crore hai. Other costs se pehle profit kitna hai?",["₹20 crore","₹30 crore","₹40 crore","₹50 crore"],2],
+    ["M07","Very Hard","A theatre has 12 rows with 25 seats each. Total seats?","एक थिएटर में 12 पंक्तियाँ हैं और हर पंक्ति में 25 सीटें हैं। कुल सीटें कितनी हैं?","Theatre mein 12 rows hain aur har row mein 25 seats hain. Total seats?",["250","275","300","325"],2],
+    ["M08","Very Hard","A movie ticket costs ₹250. What is the cost of 8 tickets?","एक फिल्म टिकट की कीमत ₹250 है। 8 टिकटों की कीमत कितनी होगी?","Movie ticket ₹250 ka hai. 8 tickets ki cost kitni hogi?",["₹1,500","₹1,750","₹2,000","₹2,250"],2],
+    ["M09","Very Hard","A film's collection rises from ₹100 crore to ₹150 crore. What is the increase percentage?","फिल्म का कलेक्शन ₹100 करोड़ से बढ़कर ₹150 करोड़ हो गया। वृद्धि प्रतिशत कितना है?","Film collection ₹100 crore se ₹150 crore ho gaya. Increase percentage kitni hai?",["25%","40%","50%","75%"],2],
+    ["M10","Extreme","A theatre sells 360 tickets at ₹250 each. Total revenue?","एक थिएटर ₹250 प्रति टिकट की दर से 360 टिकट बेचता है। कुल आय कितनी है?","Theatre 360 tickets ₹250 each par sell karta hai. Total revenue kitna hai?",["₹80,000","₹90,000","₹95,000","₹1,00,000"],1],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Movies & Entertainment", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // 🌍 WORLD & POLITICS
+  ...[
+    ["W01","Easy","What is the capital of India?","भारत की राजधानी क्या है?","India ki capital kya hai?",["Mumbai","New Delhi","Kolkata","Chennai"],1],
+    ["W02","Easy","Where is the headquarters of the United Nations?","संयुक्त राष्ट्र का मुख्यालय कहाँ है?","United Nations ka headquarters kahan hai?",["London","New York City","Paris","Rome"],1],
+    ["W03","Easy","What are the two houses of the Indian Parliament?","भारतीय संसद के दो सदन कौन-से हैं?","Indian Parliament ke do houses kaun-se hain?",["Lok Sabha and Rajya Sabha","Vidhan Sabha and Lok Sabha","Rajya Sabha and Supreme Court","Lok Sabha and High Court"],0],
+    ["W04","Hard","How many years are there in one decade?","एक दशक में कितने वर्ष होते हैं?","Ek decade mein kitne years hote hain?",["5","10","15","20"],1],
+    ["W05","Hard","If a country's population rises from 50 million to 60 million, what is the increase percentage?","यदि किसी देश की जनसंख्या 5 करोड़ से बढ़कर 6 करोड़ हो जाए, तो वृद्धि प्रतिशत कितना है?","Population 5 crore se 6 crore ho jaye to increase percentage kitni hai?",["10%","15%","20%","25%"],2],
+    ["W06","Hard","What is the main purpose of an election?","चुनाव का मुख्य उद्देश्य क्या है?","Election ka main purpose kya hota hai?",["Choosing representatives","Printing money","Changing weather","Making laws automatically"],0],
+    ["W07","Very Hard","If 60% of 500 voters vote, how many voters is that?","500 मतदाताओं में से 60% मतदान करें, तो कितने मतदाता मतदान करेंगे?","500 voters mein 60% vote karein to kitne voters vote karenge?",["250","300","350","400"],1],
+    ["W08","Very Hard","A country has 80 million people and grows by 10%. New population?","किसी देश की जनसंख्या 8 करोड़ है और 10% बढ़ती है। नई जनसंख्या कितनी होगी?","Country ki population 8 crore hai aur 10% grow hoti hai. New population kitni hogi?",["8.4 crore","8.8 crore","9 crore","9.2 crore"],1],
+    ["W09","Very Hard","If 3 out of 5 representatives support a proposal, what fraction supports it?","यदि 5 में से 3 प्रतिनिधि किसी प्रस्ताव का समर्थन करते हैं, तो समर्थन का भिन्न क्या है?","5 mein se 3 representatives support karein to fraction kya hoga?",["1/5","2/5","3/5","4/5"],2],
+    ["W10","Extreme","A population increases from 2 crore to 2.5 crore. What is the percentage increase?","जनसंख्या 2 करोड़ से बढ़कर 2.5 करोड़ हो जाती है। प्रतिशत वृद्धि कितनी है?","Population 2 crore se 2.5 crore ho jaye to percentage increase kitna hai?",["20%","25%","30%","50%"],1],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"World & Politics", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // ❤️ RELATIONSHIP & SOCIAL SITUATIONS
+  ...[
+    ["R01","Easy","What is active listening?","सक्रिय रूप से सुनना क्या है?","Active listening kya hota hai?",["Paying attention while someone speaks","Ignoring someone","Interrupting often","Changing the topic"],0],
+    ["R02","Easy","What is a respectful way to handle a disagreement?","असहमति को संभालने का सम्मानजनक तरीका क्या है?","Disagreement handle karne ka respectful way kya hai?",["Calm discussion","Shouting","Insulting","Ignoring forever"],0],
+    ["R03","Easy","If a friend is upset, what is usually helpful first?","यदि कोई मित्र परेशान है, तो शुरुआत में क्या मददगार होता है?","Agar friend upset hai to pehle kya helpful hota hai?",["Listening","Mocking","Arguing","Ignoring"],0],
+    ["R04","Hard","Two friends misunderstand each other. What should they do?","दो दोस्तों के बीच गलतफहमी हो जाए तो उन्हें क्या करना चाहिए?","Do friends ke beech misunderstanding ho to kya karna chahiye?",["Clarify calmly","Spread rumors","Avoid forever","Blame immediately"],0],
+    ["R05","Hard","Why are boundaries important in relationships?","रिश्तों में सीमाएँ क्यों महत्वपूर्ण होती हैं?","Relationships mein boundaries important kyun hoti hain?",["They define personal limits","They create confusion","They remove communication","They force agreement"],0],
+    ["R06","Hard","A friend repeatedly arrives late. What is a healthy response?","कोई मित्र बार-बार देर से आता है। स्वस्थ प्रतिक्रिया क्या होगी?","Friend baar-baar late aata hai. Healthy response kya hoga?",["Communicate the concern","Insult them","Become late intentionally","Never explain"],0],
+    ["R07","Very Hard","Two people disagree. What can reduce unnecessary conflict?","दो लोग असहमत हैं। अनावश्यक विवाद को कम करने के लिए क्या किया जा सकता है?","Do log disagree karte hain. Unnecessary conflict kaise reduce ho sakta hai?",["Listen and clarify","Raise voices","Assume intentions","Spread the argument"],0],
+    ["R08","Very Hard","In a group decision, why should minority opinions be heard?","समूह के निर्णय में अल्पमत की राय क्यों सुनी जानी चाहिए?","Group decision mein minority opinion kyun sunni chahiye?",["It can reveal useful concerns","It always wins","It avoids all decisions","It removes discussion"],0],
+    ["R09","Very Hard","What is a constructive response to criticism?","आलोचना पर रचनात्मक प्रतिक्रिया क्या है?","Criticism par constructive response kya hota hai?",["Consider the useful point","Immediately insult back","Ignore every detail","Start an argument"],0],
+    ["R10","Extreme","A group has 8 members and 6 agree on a plan. What fraction agrees?","एक समूह में 8 सदस्य हैं और 6 किसी योजना से सहमत हैं। सहमति का भिन्न क्या है?","Group mein 8 members hain aur 6 agree karte hain. Fraction kya hai?",["1/2","3/4","4/5","7/8"],1],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Relationship", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // 🧠 QUIZ & GENERAL KNOWLEDGE
+  ...[
+    ["G01","Easy","Which is the largest planet in our Solar System?","हमारे सौरमंडल का सबसे बड़ा ग्रह कौन-सा है?","Solar System ka sabse bada planet kaunsa hai?",["Earth","Mars","Jupiter","Venus"],2],
+    ["G02","Easy","What is the chemical formula of water?","पानी का रासायनिक सूत्र क्या है?","Water ka chemical formula kya hai?",["CO₂","H₂O","O₂","NaCl"],1],
+    ["G03","Easy","How many continents are commonly recognized?","आमतौर पर कितने महाद्वीप माने जाते हैं?","Commonly kitne continents recognize kiye jaate hain?",["5","6","7","8"],2],
+    ["G04","Hard","Which planet is known as the Red Planet?","किस ग्रह को लाल ग्रह कहा जाता है?","Kis planet ko Red Planet kaha jata hai?",["Venus","Mars","Jupiter","Mercury"],1],
+    ["G05","Hard","How many degrees are in a full circle?","एक पूर्ण वृत्त में कितने डिग्री होते हैं?","Full circle mein kitne degrees hote hain?",["90°","180°","270°","360°"],3],
+    ["G06","Hard","Which gas is most abundant in Earth's atmosphere?","पृथ्वी के वायुमंडल में सबसे अधिक मात्रा में कौन-सी गैस है?","Earth atmosphere mein sabse abundant gas kaunsi hai?",["Oxygen","Nitrogen","Hydrogen","Carbon dioxide"],1],
+    ["G07","Very Hard","How many seconds are there in 5 minutes?","5 मिनट में कितने सेकंड होते हैं?","5 minutes mein kitne seconds hote hain?",["200","250","300","350"],2],
+    ["G08","Very Hard","If one dozen costs ₹240, what is the cost of 5 items?","यदि एक दर्जन वस्तुओं की कीमत ₹240 है, तो 5 वस्तुओं की कीमत कितनी होगी?","Agar 1 dozen items ₹240 ke hain, to 5 items ki cost kitni hogi?",["₹80","₹90","₹100","₹120"],2],
+    ["G09","Very Hard","What is 15% of 800?","800 का 15% कितना है?","800 ka 15% kitna hai?",["100","120","140","160"],1],
+    ["G10","Extreme","A clock shows 3:00. What angle is between the hands?","घड़ी में 3:00 बजे हैं। दोनों सुइयों के बीच कोण कितना है?","Clock mein 3:00 baj rahe hain. Hands ke beech angle kitna hai?",["45°","60°","90°","120°"],2],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Quiz & General Knowledge", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
+
+  // 🧩 PUZZLE & MATHEMATICS
+  ...[
+    ["P01","Easy","Complete: 2, 4, 6, 8, ?","श्रृंखला पूरी करें: 2, 4, 6, 8, ?","Series complete karo: 2, 4, 6, 8, ?",["9","10","11","12"],1],
+    ["P02","Easy","What is 7 × 8?","7 × 8 कितना होता है?","7 × 8 kitna hota hai?",["54","56","58","64"],1],
+    ["P03","Easy","If 5 apples cost ₹50, what is one apple's price?","5 सेबों की कीमत ₹50 है। एक सेब की कीमत कितनी है?","5 apples ₹50 ke hain. Ek apple ki price kitni hai?",["₹5","₹10","₹15","₹20"],1],
+    ["P04","Hard","Complete: 3, 6, 12, 24, ?","श्रृंखला पूरी करें: 3, 6, 12, 24, ?","Series complete karo: 3, 6, 12, 24, ?",["36","42","48","54"],2],
+    ["P05","Hard","What is 25% of 200?","200 का 25% कितना है?","200 ka 25% kitna hai?",["25","40","50","75"],2],
+    ["P06","Hard","A number multiplied by 3 equals 27. What is the number?","किसी संख्या को 3 से गुणा करने पर 27 मिलता है। संख्या क्या है?","Kisi number ko 3 se multiply karne par 27 milta hai. Number kya hai?",["6","7","8","9"],3],
+    ["P07","Very Hard","Complete: 1, 1, 2, 3, 5, 8, ?","श्रृंखला पूरी करें: 1, 1, 2, 3, 5, 8, ?","Series complete karo: 1, 1, 2, 3, 5, 8, ?",["11","12","13","15"],2],
+    ["P08","Very Hard","If x + 15 = 42, what is x?","यदि x + 15 = 42 है, तो x कितना है?","Agar x + 15 = 42 hai, to x kitna hai?",["17","27","37","57"],1],
+    ["P09","Very Hard","A rectangle is 12 cm long and 5 cm wide. What is its area?","एक आयत की लंबाई 12 सेमी और चौड़ाई 5 सेमी है। क्षेत्रफल कितना है?","Rectangle 12 cm long aur 5 cm wide hai. Area kitna hai?",["17 cm²","34 cm²","60 cm²","120 cm²"],2],
+    ["P10","Extreme","A number is increased by 20% and becomes 180. What was the original number?","किसी संख्या में 20% वृद्धि करने पर 180 मिलता है। मूल संख्या क्या थी?","Number ko 20% increase karne par 180 milta hai. Original number kya tha?",["120","140","150","160"],2],
+  ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
+    id, category:"Puzzle & Mathematics", difficulty,
+    question:{en,hi,hinglish},
+    options:{en,hi,hinglish},
+    answer
+  })),
 ];
 
 const razorpay = new Razorpay({
@@ -90,46 +256,67 @@ function safeName(name) {
     .slice(0, 80) || "Student";
 }
 
-function buildReview(answers) {
-  return ANSWERS.map((correctAnswer, index) => {
-    const selected = Number.isInteger(answers?.[index])
-      ? answers[index]
-      : answers?.[String(index)] !== undefined
-        ? Number(answers[String(index)])
-        : null;
+function buildReview(session, answers) {
+  const questions = Array.isArray(session?.selected_questions)
+    ? session.selected_questions
+    : [];
+
+  const weights = {
+    Easy: 3,
+    Hard: 5,
+    "Very Hard": 8,
+    Extreme: 12,
+  };
+
+  return questions.map((question, index) => {
+    const selected =
+      Number.isInteger(answers?.[index])
+        ? answers[index]
+        : answers?.[String(index)] !== undefined
+          ? Number(answers[String(index)])
+          : null;
+
+    const maxPoints = weights[question.difficulty] || 0;
+    const correctAnswer = Number(question.answer);
 
     return {
       question: index + 1,
+      questionId: question.id,
+      category: question.category,
       selectedAnswer: selected,
       correctAnswer,
       correct: selected === correctAnswer,
-      points: selected === correctAnswer ? WEIGHTS[index] : 0,
-      maxPoints: WEIGHTS[index],
-      difficulty:
-  index < 3
-    ? "Easy"
-    : index < 7
-      ? "Hard"
-      : index < 10
-        ? "Very Hard"
-        : "Extreme",
+      points: selected === correctAnswer ? maxPoints : 0,
+      maxPoints,
+      difficulty: question.difficulty,
     };
   });
 }
 
 function calculateResult(session, answers) {
-  const review = buildReview(answers);
-  const score = review.reduce((sum, item) => sum + item.points, 0);
-  const correctCount = review.filter((item) => item.correct).length;
+  const review = buildReview(session, answers);
+
+  const score = review.reduce(
+    (sum, item) => sum + item.points,
+    0
+  );
+
+  const correctCount = review.filter(
+    (item) => item.correct
+  ).length;
 
   const startedAt = new Date(session.started_at).getTime();
   const completedAt = Date.now();
-  const elapsedMs = Math.max(0, completedAt - startedAt);
+
+  const elapsedMs = Math.max(
+    0,
+    completedAt - startedAt
+  );
 
   return {
     score,
     correctCount,
-    totalQuestions: 19,
+    totalQuestions: review.length,
     performance: performanceFromScore(score),
     elapsedMs,
     formattedTime: formatElapsed(elapsedMs),
@@ -322,7 +509,7 @@ async function sendPaymentReminderEmail(session, paymentLink) {
     <div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;padding:28px">
       <h1 style="color:#102a56">IQNova — IQ Challenge</h1>
       <p>Hi ${safeName(session.name)},</p>
-      <p>You have completed all 19 questions of your IQNova educational challenge.</p>
+      <p>You have completed all 13 questions of your IQNova educational challenge.</p>
       <p>Your result is ready. Pay the one-time <strong>₹19</strong> unlock fee to see your full score, detailed analysis, answer review and certificate.</p>
       <p style="margin:28px 0">
         <a href="${paymentLink.short_url}" style="background:#102a56;color:white;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold">
@@ -945,12 +1132,32 @@ app.use(express.json({ limit: "1mb" }));
 
 app.post("/api/challenge/start", async (req, res) => {
   try {
-    const { sessionId, name, age, email } = req.body;
+    const { sessionId, name, age, email, interests } = req.body;
 
-    if (!sessionId || !name || !age || !email) {
+    if (!sessionId || !name || !age || !email || !Array.isArray(interests)) {
       return res.status(400).json({
         success: false,
-        message: "Name, age, email and sessionId are required.",
+        message: "Name, age, email, sessionId and interests are required.",
+      });
+    }
+
+    // Exactly 5 interests required
+    const selectedInterests = [...new Set(interests.map(String))];
+    const selectedCategories = selectedInterests.map(
+  (interest) => INTEREST_CATEGORY_MAP[interest]
+);
+
+if (selectedCategories.some((category) => !category)) {
+  return res.status(400).json({
+    success: false,
+    message: "Invalid interest selected.",
+  });
+}
+
+    if (selectedInterests.length !== 5) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select exactly 5 interests.",
       });
     }
 
@@ -963,8 +1170,49 @@ app.post("/api/challenge/start", async (req, res) => {
       .maybeSingle();
 
     if (existing) {
-      return res.json({ success: true, sessionId });
+      return res.json({
+        success: true,
+        sessionId,
+        interests: existing.interests || [],
+        questions: existing.selected_questions || [],
+      });
     }
+
+    // Select questions from the 5 chosen categories.
+    // 3 questions from each category = exactly 15 questions.
+    const selectedQuestions = [];
+
+    for (const category of selectedCategories) {
+      const categoryQuestions = QUESTION_BANK.filter(
+        (q) => q.category === category
+      );
+
+      const shuffled = [...categoryQuestions].sort(
+        () => Math.random() - 0.5
+      );
+
+      selectedQuestions.push(...shuffled.slice(0, 3));
+    }
+
+    // Shuffle the final 15-question order
+    selectedQuestions.sort(() => Math.random() - 0.5);
+
+    if (selectedQuestions.length !== QUESTION_COUNT) {
+      return res.status(500).json({
+        success: false,
+        message: "Unable to generate challenge questions.",
+      });
+    }
+
+    // Never send correct answers to frontend
+    const publicQuestions = selectedQuestions.map((q, index) => ({
+      id: q.id,
+      number: index + 1,
+      category: q.category,
+      difficulty: q.difficulty,
+      question: q.question,
+      options: q.options,
+    }));
 
     const { error } = await supabase
       .from("challenge_sessions")
@@ -973,16 +1221,27 @@ app.post("/api/challenge/start", async (req, res) => {
         name: String(name).trim(),
         age: Number(age),
         email: normalizedEmail,
+        interests: selectedInterests,
+        selected_questions: selectedQuestions,
         started_at: new Date().toISOString(),
       });
 
     if (error) throw error;
 
-    res.json({ success: true, sessionId });
+    res.json({
+      success: true,
+      sessionId,
+      interests: selectedInterests,
+      questions: publicQuestions,
+    });
   } catch (error) {
-    console.error("Start error:", error);
-    res.status(500).json({ success: false, message: "Challenge start failed." });
-  }
+  console.error("Start error:", error);
+
+  res.status(500).json({
+    success: false,
+    message: error?.message || "Challenge start failed.",
+  });
+}
 });
 
 app.post("/api/challenge/complete", async (req, res) => {
