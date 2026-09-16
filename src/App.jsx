@@ -140,11 +140,25 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   const t = translations[language];
   const currentQuestion = quizQuestions[current];
 
-  const questionOptions = Array.isArray(currentQuestion?.options)
-  ? currentQuestion.options
-  : currentQuestion?.options?.[language] ||
-    currentQuestion?.options?.en ||
-    [];
+  const questionOptions = (() => {
+  const raw = currentQuestion?.options;
+
+  if (Array.isArray(raw)) {
+    return raw;
+  }
+
+  if (raw && typeof raw === "object") {
+    const localized = raw[language] || raw.en;
+
+    if (Array.isArray(localized)) {
+      return localized;
+    }
+
+    return Object.values(localized || {});
+  }
+
+  return [];
+})();
 
   const loadPaidResult = async (sid) => {
     const response = await fetch(`${API}/api/challenge/result/${sid}`);
