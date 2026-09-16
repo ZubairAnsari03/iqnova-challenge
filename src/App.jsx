@@ -661,7 +661,12 @@ setPage("quiz");
       </h1>
 
       <div className="options">
-        {currentQuestion.options.map((option, index) => (
+        {(language === "english"
+  ? currentQuestion.options.en
+  : language === "hindi"
+    ? currentQuestion.options.hi
+    : currentQuestion.options.hinglish
+).map((option, index) => (
           <button
             key={index}
             className={
