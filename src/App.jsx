@@ -677,27 +677,23 @@ setPage("quiz");
       <h1>{questionText}</h1>
 
       <div className="options">
-        {questionOptions.map((option, index) => (
-          <button
-            key={index}
-            type="button"
-            className={
-              answers[current] === index
-                ? "option selected"
-                : "option"
-            }
-            onClick={() =>
-              setAnswers((prev) => ({
-                ...prev,
-                [current]: index,
-              }))
-            }
-          >
-            <span>{String.fromCharCode(65 + index)}</span>
-            {option}
-          </button>
-        ))}
-      </div>
+  {questionOptions.map((option, index) => (
+    <button
+      key={index}
+      type="button"
+      className={`option ${answers[current] === index ? "selected" : ""}`}
+      onClick={() =>
+        setAnswers((prev) => ({
+          ...prev,
+          [current]: index,
+        }))
+      }
+    >
+      <span>{String.fromCharCode(65 + index)}</span>
+      {option}
+    </button>
+  ))}
+</div>
 
       <button
         className="primary-button next-button"
