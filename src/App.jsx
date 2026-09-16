@@ -140,6 +140,20 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   const t = translations[language];
   const currentQuestion = quizQuestions[current];
 
+  const questionText = (() => {
+  const raw = currentQuestion?.question;
+
+  if (typeof raw === "string") {
+    return raw;
+  }
+
+  if (raw && typeof raw === "object") {
+    return raw[language] || raw.en || "";
+  }
+
+  return "";
+})();
+
   const questionOptions = (() => {
   const raw = currentQuestion?.options;
 
