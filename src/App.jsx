@@ -140,7 +140,7 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   const t = translations[language];
   const currentQuestion = quizQuestions[current];
 
-  const questionText = (() => {
+const questionText = (() => {
   const raw = currentQuestion?.question;
 
   if (typeof raw === "string") {
@@ -148,13 +148,13 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   }
 
   if (raw && typeof raw === "object") {
-    return raw[language] || raw.en || "";
+    return raw[language] || raw.en || raw.hinglish || "";
   }
 
   return "";
 })();
 
-  const questionOptions = (() => {
+const questionOptions = (() => {
   const raw = currentQuestion?.options;
 
   if (Array.isArray(raw)) {
@@ -162,18 +162,22 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   }
 
   if (raw && typeof raw === "object") {
-  const localized = raw[language];
+    if (Array.isArray(raw[language])) {
+      return raw[language];
+    }
 
-  if (Array.isArray(localized)) {
-    return localized;
+    if (Array.isArray(raw.hinglish)) {
+      return raw.hinglish;
+    }
+
+    if (Array.isArray(raw.en)) {
+      return raw.en;
+    }
+
+    if (Array.isArray(raw.hi)) {
+      return raw.hi;
+    }
   }
-
-  if (Array.isArray(raw.en)) {
-    return raw.en;
-  }
-}
-
-return [];
 
   return [];
 })();
@@ -677,21 +681,14 @@ setPage("quiz");
         <span>{currentQuestion.difficulty}</span>
       </div>
 
-      <h1>
-        {language === "english"
-          ? currentQuestion.question.en
-          : language === "hindi"
-            ? currentQuestion.question.hi
-            : currentQuestion.question.hinglish}
-      </h1>
+      <h1>{questionText}</h1>
 
       <div className="options">
   {questionOptions.map((option, index) => (
     <button
       key={index}
-      className={`option ${
-        answers[current] === index ? "selected" : ""
-      }`}
+      type="button"
+      className={`option ${answers[current] === index ? "selected" : ""}`}
       onClick={() =>
         setAnswers((prev) => ({
           ...prev,
@@ -700,7 +697,7 @@ setPage("quiz");
       }
     >
       <span>{String.fromCharCode(65 + index)}</span>
-      {option}
+      <span>{option}</span>
     </button>
   ))}
 </div>
