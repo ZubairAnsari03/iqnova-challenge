@@ -608,54 +608,75 @@ setPage("quiz");
       )}
 
       {page === "quiz" && currentQuestion && (
-        <main className="quiz-page">
-          <div className="quiz-top">
-            <span>{t.question} {current + 1} / {quizQuestions.length}</span>
-            <span className={`difficulty-label ${currentQuestion.difficulty.toLowerCase().replace(" ", "-")}`}>{currentQuestion.difficulty}</span>
-          </div>
+  <main className="quiz-page">
+    <div className="quiz-top">
+      <span>
+        {t.question} {current + 1} / {quizQuestions.length}
+      </span>
 
-          <div className="progress">
-            <div style={{ width: `${((current + 1) / quizQuestions.length) * 100}%` }} />
-          </div>
+      <span className={`difficulty-label ${currentQuestion.difficulty.toLowerCase().replace(" ", "-")}`}>
+        {currentQuestion.difficulty}
+      </span>
+    </div>
 
-          <div className="question-card">
-            <div className="question-header">
-              <div className="question-number">{String(current + 1).padStart(2, "0")}</div>
-              <span>{currentQuestion.difficulty}</span>
-            </div>
+    <div className="progress">
+      <div
+        style={{
+          width: `${((current + 1) / quizQuestions.length) * 100}%`
+        }}
+      />
+    </div>
 
-            <h1>
-              {language === "english"
-                ? currentQuestion.question.en
-                : language === "hindi"
-                  ? currentQuestion.question.hi
-                  : currentQuestion.question.hinglish}
-            </h1>
+    <div className="question-card">
+      <div className="question-header">
+        <div className="question-number">
+          {String(current + 1).padStart(2, "0")}
+        </div>
 
-            <div className="options">
-              {(language === "english"
-                ? currentQuestion.options.en
-                : language === "hindi"
-                  ? currentQuestion.options.hi
-                  : currentQuestion.options.hinglish
-              ).map((option, index) => (
-                <button
-                  key={index}
-                  className={answers[current] === index ? "option selected" : "option"}
-                  onClick={() => setAnswers((prev) => ({ ...prev, [current]: index }))}
-                >
-                  <span>{String.fromCharCode(65 + index)}</span>{option}
-                </button>
-              ))}
-            </div>
+        <span>{currentQuestion.difficulty}</span>
+      </div>
 
-            <button className="primary-button next-button" disabled={answers[current] === undefined} onClick={nextQuestion}>
-              {current === quizQuestions.length - 1 ? t.finish : t.next}<span>→</span>
-            </button>
-          </div>
+      <h1>
+        {language === "english"
+          ? currentQuestion.question.en
+          : language === "hindi"
+            ? currentQuestion.question.hi
+            : currentQuestion.question.hinglish}
+      </h1>
 
-        </main>
-      )}
+      <div className="options">
+        {currentQuestion.options.map((option, index) => (
+          <button
+            key={index}
+            className={
+              answers[current] === index
+                ? "option selected"
+                : "option"
+            }
+            onClick={() =>
+              setAnswers((prev) => ({
+                ...prev,
+                [current]: index,
+              }))
+            }
+          >
+            <span>{String.fromCharCode(65 + index)}</span>
+            {option}
+          </button>
+        ))}
+      </div>
+
+      <button
+        className="primary-button next-button"
+        disabled={answers[current] === undefined}
+        onClick={nextQuestion}
+      >
+        {current === quizQuestions.length - 1 ? t.finish : t.next}
+        <span>→</span>
+      </button>
+    </div>
+  </main>
+)}
       
       {page === "result" && (
         <main className="start-page">
