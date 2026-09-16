@@ -140,47 +140,36 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   const t = translations[language];
   const currentQuestion = quizQuestions[current];
 
-const questionText = (() => {
-  const raw = currentQuestion?.question;
+  // Backend-safe question text. Supports both object and string formats.
+  const questionText = (() => {
+    const raw = currentQuestion?.question;
 
-  if (typeof raw === "string") {
-    return raw;
-  }
+    if (typeof raw === "string") return raw;
 
-  if (raw && typeof raw === "object") {
-    return raw[language] || raw.en || raw.hinglish || "";
-  }
-
-  return "";
-})();
-
-const questionOptions = (() => {
-  const raw = currentQuestion?.options;
-
-  if (Array.isArray(raw)) {
-    return raw;
-  }
-
-  if (raw && typeof raw === "object") {
-    if (Array.isArray(raw[language])) {
-      return raw[language];
+    if (raw && typeof raw === "object") {
+      return raw[language] || raw.hinglish || raw.en || raw.hi || "";
     }
 
-    if (Array.isArray(raw.hinglish)) {
-      return raw.hinglish;
+    return "";
+  })();
+
+  // Backend-safe options. ALWAYS returns an array, so .map() cannot crash.
+  const questionOptions = (() => {
+    const raw = currentQuestion?.options;
+
+    if (Array.isArray(raw)) return raw;
+
+    if (raw && typeof raw === "object") {
+      const localized = raw[language];
+      if (Array.isArray(localized)) return localized;
+
+      if (Array.isArray(raw.hinglish)) return raw.hinglish;
+      if (Array.isArray(raw.en)) return raw.en;
+      if (Array.isArray(raw.hi)) return raw.hi;
     }
 
-    if (Array.isArray(raw.en)) {
-      return raw.en;
-    }
-
-    if (Array.isArray(raw.hi)) {
-      return raw.hi;
-    }
-  }
-
-  return [];
-})();
+    return [];
+  })();
 
   const loadPaidResult = async (sid) => {
     const response = await fetch(`${API}/api/challenge/result/${sid}`);
@@ -651,7 +640,6 @@ setPage("quiz");
 
       {page === "quiz" && currentQuestion && (
   <main className="quiz-page">
-
     <div className="quiz-top">
       <span>
         {t.question} {current + 1} / {quizQuestions.length}
@@ -675,55 +663,33 @@ setPage("quiz");
     </div>
 
     <div className="question-card">
-
       <div className="question-header">
         <div className="question-number">
           {String(current + 1).padStart(2, "0")}
         </div>
-
         <span>{currentQuestion.difficulty}</span>
       </div>
 
-      <h1>
-        {language === "english"
-          ? currentQuestion.question.en
-          : language === "hindi"
-            ? currentQuestion.question.hi
-            : currentQuestion.question.hinglish}
-      </h1>
+      <h1>{questionText}</h1>
 
       <div className="options">
-        {(
-  Array.isArray(currentQuestion.options)
-    ? currentQuestion.options
-    : Array.isArray(currentQuestion.options?.[language])
-      ? currentQuestion.options[language]
-      : Array.isArray(currentQuestion.options?.en)
-        ? currentQuestion.options.en
-        : Array.isArray(currentQuestion.options?.hi)
-          ? currentQuestion.options.hi
-          : []
-).map((option, index) => (
-          <button
-            key={index}
-            type="button"
-            className={
-              answers[current] === index
-                ? "option selected"
-                : "option"
-            }
-            onClick={() =>
-              setAnswers((prev) => ({
-                ...prev,
-                [current]: index,
-              }))
-            }
-          >
-            <span>{String.fromCharCode(65 + index)}</span>
-            <span>{option}</span>
-          </button>
-        ))}
-      </div>
+  {questionOptions.map((option, index) => (
+    <button
+      key={index}
+      type="button"
+      className={`option ${answers[current] === index ? "selected" : ""}`}
+      onClick={() =>
+        setAnswers((prev) => ({
+          ...prev,
+          [current]: index,
+        }))
+      }
+    >
+      <span>{String.fromCharCode(65 + index)}</span>
+      <span>{option}</span>
+    </button>
+  ))}
+</div>
 
       <button
         className="primary-button next-button"
@@ -735,7 +701,6 @@ setPage("quiz");
           : t.next}
         <span>→</span>
       </button>
-
     </div>
   </main>
 )}
