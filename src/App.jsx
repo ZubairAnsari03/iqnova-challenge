@@ -162,14 +162,18 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   }
 
   if (raw && typeof raw === "object") {
-    const localized = raw[language] || raw.en;
+  const localized = raw[language];
 
-    if (Array.isArray(localized)) {
-      return localized;
-    }
-
-    return Object.values(localized || {});
+  if (Array.isArray(localized)) {
+    return localized;
   }
+
+  if (Array.isArray(raw.en)) {
+    return raw.en;
+  }
+}
+
+return [];
 
   return [];
 })();
@@ -682,31 +686,24 @@ setPage("quiz");
       </h1>
 
       <div className="options">
-        {(language === "english"
-          ? currentQuestion.options.en
-          : language === "hindi"
-            ? currentQuestion.options.hi
-            : currentQuestion.options.hinglish
-        ).map((option, index) => (
-          <button
-            key={index}
-            className={
-              answers[current] === index
-                ? "option selected"
-                : "option"
-            }
-            onClick={() =>
-              setAnswers((prev) => ({
-                ...prev,
-                [current]: index,
-              }))
-            }
-          >
-            <span>{String.fromCharCode(65 + index)}</span>
-            {option}
-          </button>
-        ))}
-      </div>
+  {questionOptions.map((option, index) => (
+    <button
+      key={index}
+      className={`option ${
+        answers[current] === index ? "selected" : ""
+      }`}
+      onClick={() =>
+        setAnswers((prev) => ({
+          ...prev,
+          [current]: index,
+        }))
+      }
+    >
+      <span>{String.fromCharCode(65 + index)}</span>
+      {option}
+    </button>
+  ))}
+</div>
 
       <button
         className="primary-button next-button"
