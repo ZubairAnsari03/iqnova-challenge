@@ -140,6 +140,22 @@ const [quizQuestions, setQuizQuestions] = useState([]);
   const t = translations[language];
   const currentQuestion = quizQuestions[current];
 
+  const questionText = currentQuestion
+    ? language === "english"
+      ? currentQuestion.question.en
+      : language === "hindi"
+        ? currentQuestion.question.hi
+        : currentQuestion.question.hinglish
+    : "";
+
+  const questionOptions = currentQuestion
+    ? language === "english"
+      ? currentQuestion.options.en
+      : language === "hindi"
+        ? currentQuestion.options.hi
+        : currentQuestion.options.hinglish
+    : [];
+
   const loadPaidResult = async (sid) => {
     const response = await fetch(`${API}/api/challenge/result/${sid}`);
     const data = await response.json();
@@ -636,16 +652,10 @@ setPage("quiz");
         <span>{currentQuestion.difficulty}</span>
       </div>
 
-      <h1>
-        {language === "english"
-          ? currentQuestion.question.en
-          : language === "hindi"
-            ? currentQuestion.question.hi
-            : currentQuestion.question.hinglish}
-      </h1>
+      <h1>{questionText}</h1>
 
       <div className="options">
-        {currentQuestion.options.map((option, index) => (
+        {questionOptions.map((option, index) => (
           <button
             key={index}
             className={
