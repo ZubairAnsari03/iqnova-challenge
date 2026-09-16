@@ -681,11 +681,15 @@ setPage("quiz");
 </h1>
 
       <div className="options">
-  {questionOptions.map((option, index) => (
+  {(language === "english"
+    ? currentQuestion.options.en
+    : language === "hindi"
+      ? currentQuestion.options.hi
+      : currentQuestion.options.hinglish
+  ).map((option, index) => (
     <button
       key={index}
-      type="button"
-      className={`option ${answers[current] === index ? "selected" : ""}`}
+      className={answers[current] === index ? "option selected" : "option"}
       onClick={() =>
         setAnswers((prev) => ({
           ...prev,
