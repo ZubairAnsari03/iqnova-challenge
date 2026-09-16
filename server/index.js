@@ -56,7 +56,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Education", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -75,7 +79,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Social Media", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -94,7 +102,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Cricket & Sports", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    ooptions: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -113,7 +125,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Movies & Entertainment", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -132,7 +148,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"World & Politics", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -151,7 +171,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Relationship", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -170,7 +194,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Quiz & General Knowledge", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 
@@ -189,7 +217,11 @@ const QUESTION_BANK = [
   ].map(([id,difficulty,en,hi,hinglish,options,answer]) => ({
     id, category:"Puzzle & Mathematics", difficulty,
     question:{en,hi,hinglish},
-    options:{en,hi,hinglish},
+    options: {
+  en: options,
+  hi: options,
+  hinglish: options,
+},
     answer
   })),
 ];
