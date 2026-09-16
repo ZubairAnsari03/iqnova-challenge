@@ -163,6 +163,14 @@ const [quizQuestions, setQuizQuestions] = useState([]);
     return options.en;
   }
 
+  if (options && Array.isArray(options.hinglish)) {
+    return options.hinglish;
+  }
+
+  if (options && Array.isArray(options.hi)) {
+    return options.hi;
+  }
+
   return [];
 })();
 
@@ -670,10 +678,15 @@ setPage("quiz");
             : currentQuestion.question.hinglish}
       </h1>
 
+      <button
+        className="primary-button next-button"
+              </h1>
+
       <div className="options">
         {questionOptions.map((option, index) => (
           <button
             key={index}
+            type="button"
             className={
               answers[current] === index
                 ? "option selected"
